@@ -4,7 +4,7 @@
 //   · ffmpeg-static 번들 바이너리만 사용 (윈도우/리눅스 자동, 시스템 설치 불필요)
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, rmSync, renameSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import ffmpegPath from 'ffmpeg-static';
 import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
@@ -49,8 +49,11 @@ async function narrate(lines, outDir) {
       out.push({ file: null, duration: 0 });
       continue;
     }
+    // msedge-tts 는 매번 같은 파일명(audio.mp3)으로 저장 → 즉시 고유명으로 이동(안 하면 덮어써짐)
     const { audioFilePath } = await tts.toFile(outDir, text, { rate });
-    out.push({ file: audioFilePath, duration: await mediaDuration(audioFilePath) });
+    const target = join(outDir, `narr-${String(i).padStart(2, '0')}.mp3`);
+    renameSync(audioFilePath, target);
+    out.push({ file: target, duration: await mediaDuration(target) });
   }
   return out;
 }
