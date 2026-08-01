@@ -46,7 +46,12 @@ export async function renderCard(html) {
         )
       );
     });
-    return await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: SIZE, height: SIZE } });
+    // 인스타 게시 API 는 JPEG 를 안정적으로 받는다.
+    return await page.screenshot({
+      type: 'jpeg',
+      quality: 92,
+      clip: { x: 0, y: 0, width: SIZE, height: SIZE },
+    });
   } finally {
     await page.close();
   }

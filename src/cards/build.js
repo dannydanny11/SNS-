@@ -27,7 +27,7 @@ export async function buildPostCards(post, outDir) {
     category: category.name,
     total,
   });
-  const coverPath = `${outDir}/01-cover.png`;
+  const coverPath = `${outDir}/01-cover.jpg`;
   writeFileSync(coverPath, await renderCard(coverHtml));
   files.push(coverPath);
 
@@ -38,14 +38,14 @@ export async function buildPostCards(post, outDir) {
       total,
       product: products[i],
     });
-    const p = `${outDir}/${String(i + 2).padStart(2, '0')}-product.png`;
+    const p = `${outDir}/${String(i + 2).padStart(2, '0')}-product.jpg`;
     writeFileSync(p, await renderCard(html));
     files.push(p);
   }
 
   // 3) CTA
   const ctaHtml = buildCta(theme, { category: category.name });
-  const ctaPath = `${outDir}/${String(products.length + 2).padStart(2, '0')}-cta.png`;
+  const ctaPath = `${outDir}/${String(products.length + 2).padStart(2, '0')}-cta.jpg`;
   writeFileSync(ctaPath, await renderCard(ctaHtml));
   files.push(ctaPath);
 

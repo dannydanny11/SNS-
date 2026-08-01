@@ -26,13 +26,23 @@ export async function generate() {
     throw new Error(`선정 상품 부족(${products.length}개) — 이번 회차 건너뜀`);
   }
 
-  // 제휴 딥링크(선택) — productUrl 자체가 제휴 링크라 실패해도 무방
+  // 제휴 딥링크 — 일반 상품페이지 URL 로 요청해 짧은 제휴 링크(link.coupang.com/a/..) 확보
   let deeplinks = [];
   try {
-    deeplinks = await createDeeplinks(products.map((p) => p.productUrl));
+    const rawUrls = products.map(
+      (p) => `https://www.coupang.com/vp/products/${p.productId}`
+    );
+    deeplinks = await createDeeplinks(rawUrls);
   } catch {
-    /* ignore */
+    /* 실패해도 productUrl(제휴태그 포함)로 대체 */
   }
+
+  // 상품별 제휴 링크 목록 (프로필 링크 페이지용) — 짧은 링크 우선, 없으면 productUrl
+  const links = products.map((p, i) => ({
+    name: p.productName.split(',')[0].trim(),
+    price: p.productPrice,
+    url: deeplinks[i]?.shortenUrl || p.productUrl,
+  }));
 
   const runId = new Date().toISOString().replace(/[:.]/g, '-');
   mkdirSync(PUB_DIR, { recursive: true });
@@ -57,8 +67,19 @@ export async function generate() {
     caption,
     hashtags,
     deeplinks,
+    links,
   };
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2));
+
+  // 프로필 링크 페이지용 링크 목록 (복사·붙여넣기용)
+  const linksMd =
+    `# ${category.name} — 오늘의 제휴 링크\n\n` +
+    links
+      .map((l) => `- ${l.name} (${l.price?.toLocaleString('ko-KR')}원)\n  ${l.url}`)
+      .join('\n') +
+    '\n';
+  writeFileSync(`${PUB_DIR}/latest-links.md`, linksMd);
+
   return manifest;
 }
 
