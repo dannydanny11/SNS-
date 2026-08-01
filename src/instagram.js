@@ -20,6 +20,24 @@ async function graphPost(path, params) {
   return json;
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** 컨테이너가 발행 가능(FINISHED) 상태가 될 때까지 대기 */
+async function waitReady(containerId, token, { tries = 20, intervalMs = 3000 } = {}) {
+  for (let i = 0; i < tries; i++) {
+    const info = await fetch(
+      `${GRAPH}/${containerId}?fields=status_code,status&access_token=${token}`
+    ).then((r) => r.json());
+    const code = info.status_code;
+    if (code === 'FINISHED') return;
+    if (code === 'ERROR' || code === 'EXPIRED') {
+      throw new Error(`컨테이너 처리 실패: ${info.status || code}`);
+    }
+    await sleep(intervalMs); // IN_PROGRESS
+  }
+  throw new Error('컨테이너 처리 시간 초과');
+}
+
 /**
  * 캐러셀 게시물 발행.
  * @param {{imageUrls:string[], caption:string}} args
@@ -54,6 +72,9 @@ export async function publishCarousel({ imageUrls, caption }) {
     caption,
     access_token: token,
   });
+
+  // 캐러셀 처리 완료 대기 (안 기다리면 "Media ID is not available")
+  await waitReady(carousel.id, token);
 
   // 3) 발행
   const published = await graphPost(`${igUserId}/media_publish`, {

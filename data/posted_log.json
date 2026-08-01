@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "productId": 9075003138,
+    "productName": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스, 화이트, MVM1",
+    "category": "IT 액세서리",
+    "tier": "low",
+    "postedAt": "2026-08-01T12:13:47.250Z"
+  },
+  {
+    "productId": 6764000977,
+    "productName": "에이투 게이밍 LED 유선 기계식 풀키 키보드, 블랙, AG0302, 적축",
+    "category": "IT 액세서리",
+    "tier": "low",
+    "postedAt": "2026-08-01T12:13:47.250Z"
+  },
+  {
+    "productId": 8437036767,
+    "productName": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브, 1개",
+    "category": "IT 액세서리",
+    "tier": "low",
+    "postedAt": "2026-08-01T12:13:47.250Z"
+  },
+  {
+    "productId": 6577832726,
+    "productName": "홈플래닛 메탈 쿨링홀 노트북 거치대",
+    "category": "IT 액세서리",
+    "tier": "low",
+    "postedAt": "2026-08-01T12:13:47.250Z"
+  },
+  {
+    "productId": 6577822503,
+    "productName": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰, BLP-BE331W, 화이트, 5시간, BLP-BE331W, 화이트",
+    "category": "IT 액세서리",
+    "tier": "low",
+    "postedAt": "2026-08-01T12:13:47.250Z"
+  }
+]
