@@ -1,12 +1,12 @@
-# IT 액세서리 — 오늘의 제휴 링크
+# 생활 갓성비템 — 오늘의 제휴 링크
 
-- 아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스 (13,500원)
-  https://link.coupang.com/a/fRuuEp0TKe
-- 에이투 게이밍 LED 유선 기계식 풀키 키보드 (59,900원)
-  https://link.coupang.com/a/fRuuEwaZcy
-- 베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브 (32,300원)
-  https://link.coupang.com/a/fRuuEBmQWP
-- 홈플래닛 메탈 쿨링홀 노트북 거치대 (16,490원)
-  https://link.coupang.com/a/fRuuEHKAsm
-- 블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰 (28,800원)
-  https://link.coupang.com/a/fRuuEMIN9o
+- Sonipure 수납선반 전자레인지선반 주방선반 다용도 이동 금속 거치대 (19,800원)
+  https://link.coupang.com/a/fRwxtie4wm
+- [평생쓰는] 빛나온 스텐 304 욕실 청소도구 걸이 (19,000원)
+  https://link.coupang.com/a/fRwxtmOORw
+- 디에스 차량용 핸드폰 거치대 송풍구형 (35,000원)
+  https://link.coupang.com/a/fRwxtsg9pA
+- 세다가 C820 사이버 세라믹 316L 스테인리스 대용량 보온보냉 텀블러 (빨대/손잡이) (59,800원)
+  https://link.coupang.com/a/fRwxtwq01A
+- 레디보드 대용량 와이어 리빙박스 (71,700원)
+  https://link.coupang.com/a/fRwxtA0LmK

@@ -6,6 +6,7 @@ import { buildPostCards } from './cards/build.js';
 import { generateCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
 import { publishCarousel } from './instagram.js';
+import { buildLinkPage } from './linkPage.js';
 import { appendPosted } from './postedLog.js';
 import { requireEnv } from './config.js';
 import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
@@ -61,6 +62,7 @@ export async function generate() {
       productName: p.productName,
       productPrice: p.productPrice,
       productUrl: p.productUrl,
+      productImage: p.productImage,
     })),
     cardFiles: cardPaths.map((p) => basename(p)),
     cardPaths,
@@ -79,6 +81,9 @@ export async function generate() {
       .join('\n') +
     '\n';
   writeFileSync(`${PUB_DIR}/latest-links.md`, linksMd);
+
+  // 프로필 링크 페이지(GitHub Pages) 갱신 — docs/index.html
+  buildLinkPage({ category, products, links });
 
   return manifest;
 }

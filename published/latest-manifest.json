@@ -1,40 +1,45 @@
 {
-  "runId": "2026-08-01T12-09-16-410Z",
+  "runId": "2026-08-01T12-37-53-739Z",
   "category": {
-    "id": "it",
-    "name": "IT 액세서리",
-    "tier": "low"
+    "id": "value",
+    "name": "생활 갓성비템",
+    "tier": "high"
   },
   "products": [
     {
-      "productId": 9075003138,
-      "productName": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스, 화이트, MVM1",
-      "productPrice": 13500,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9075003138&itemId=26655329807&vendorItemId=93627786802&traceid=V0-153-31c96b9edafa64ee&clickBeacon=d12d1600-8da1-11f1-acb0-489ad684ad77%7E3&requestid=20260801210916355224690240&token=31850C%7CMIXED"
+      "productId": 8765366099,
+      "productName": "Sonipure 수납선반 전자레인지선반 주방선반 다용도 이동 금속 거치대",
+      "productPrice": 19800,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8765366099&itemId=25490803722&vendorItemId=95467459599&traceid=V0-153-bd3249ba1f1b195b&requestid=20260801213753681018811831&token=31850C%7CMIXED",
+      "productImage": "https://ads-partners.coupang.com/image1/7NitwbnLB_ixzGmv7O24IuXzt4bweC8IIS5lXYuY9Jy5lS6ZoBwNocG4Ak6eDLUINXkOQkCH8jb1xWhLw5gEC9rgmJTzL5KBfihD1XnTofSMBr8py_8SFSyCtM4eS3g-t5fx8CnX-IoCDXg_mqepQWIb3WwLFDpMe1TmPRSrH-CcnnHhb6bfSE4ZUv1hrZwdvqxD6KHJ-ByVNbF2Joi2yln8ahOvH65JsX8TOqfpA5AqDOVNLnW7YYSojfzaTL1gblFUxZD4zQZdfYklG7iLcSInjjoDHexqdm58M7xUhLChCT_DH4dTOS30MQAp_cJAATvrow=="
     },
     {
-      "productId": 6764000977,
-      "productName": "에이투 게이밍 LED 유선 기계식 풀키 키보드, 블랙, AG0302, 적축",
-      "productPrice": 59900,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=d1450ad0-8da1-11f1-82a2-72f20fb348da%7E3&requestid=20260801210916522107944470&token=31850C%7CMIXED"
+      "productId": 9542729589,
+      "productName": "[평생쓰는] 빛나온 스텐 304 욕실 청소도구 걸이, 실버, 1개",
+      "productPrice": 19000,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9542729589&itemId=28466211944&vendorItemId=95648386287&traceid=V0-153-f155beee441d96e5&clickBeacon=d0e84800-8da5-11f1-b653-3022c0c8738d%7E3&requestid=20260801213753833141626118&token=31850C%7CMIXED",
+      "productImage": "https://ads-partners.coupang.com/image1/BD98WuOED4UtM4HmBJqGlse_pTs6DmDRJuVtzWjh5wItqdyLMz8AIb90iWemfmViU6PFWH_wOT2tZArayLVLMi7oTw6EZJM-Aq6dv82_Fyv9iVEnc_bYMuh-Wtv5Q54e-uMQwUTVOboKeyB7ezC_iVIUjWVeZoHaRHBHxk5DnKMPVD8Qs6XVW8-YWHk7HUeqtsEy3hmrNOsnZTrUlvEZyHqDoOmLWi1v-SzyGg5K-wfUxykjh3TpjbC8TDvcEs85qIhPlCfIjMWMK89Tan2V82uUCHdY04nHEevK9gDkJBHXbBMwJIUmTiJb"
     },
     {
-      "productId": 8437036767,
-      "productName": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브, 1개",
-      "productPrice": 32300,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=d1500750-8da1-11f1-b17d-99c880f883b9%7E3&requestid=20260801210916590282472838&token=31850C%7CMIXED"
+      "productId": 9478012300,
+      "productName": "디에스 차량용 핸드폰 거치대 송풍구형, 블랙, 1개",
+      "productPrice": 35000,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9478012300&itemId=28216889568&vendorItemId=95177667223&traceid=V0-153-37dac9b758b46b20&clickBeacon=d0f9fb40-8da5-11f1-871f-2d43f736e9f3%7E3&requestid=20260801213754010072967209&token=31850C%7CMIXED",
+      "productImage": "https://ads-partners.coupang.com/image1/oic9ovFxD7VWQ6FHosyeNtXPx4Vo1v8rfEp7waVpfJyTgybIxKpic72wc-uFOxG5lgxQMyIAsSprDdrbndMlIxY_VqWdI75ROVRzWofOweoPf5ysdrSRptqOv4kPKQehKmhmKUewjZ7VdRTQ6YeBFnv_qY9dFR8NtF7w8L8FQ0svUVja_HvFykfpRF8UQAHXPCh9aEEeiIxYOYvpQpO9wriyuNOt1Ty1ubb-3eorTxw5Vw1YLyxnnZ3I1nFEGcHd4reo15iX4fFDv--l4IbxNuKeEVNJEWGRuADywjY3dE3ZOH838cvm_DoX"
     },
     {
-      "productId": 6577832726,
-      "productName": "홈플래닛 메탈 쿨링홀 노트북 거치대",
-      "productPrice": 16490,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801210916709183564350&token=31850C%7CMIXED"
+      "productId": 9265027008,
+      "productName": "세다가 C820 사이버 세라믹 316L 스테인리스 대용량 보온보냉 텀블러 (빨대/손잡이), 1개, 1000ml, 주황",
+      "productPrice": 59800,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9265027008&itemId=27416556201&vendorItemId=94382119082&traceid=V0-153-a4e907d889a00045&clickBeacon=d10a27e0-8da5-11f1-bc84-68b9dfef37e8%7E3&requestid=20260801213754122219909051&token=31850C%7CMIXED",
+      "productImage": "https://ads-partners.coupang.com/image1/gKfV-bto7E34ywQ3gKfzIwWEEvaT_18vQeDMAPNRe9_Hm3b9Y3ndpmDzdrLKy-74X2t1Kgr2gWbSsd940RoQ3-0K6gK0omrzgSv01G3PpOD3E2dh_hONEj0ZdEWVZIcyYWOe5lnimViMXF00L2pvq4QYqtALbdN6UpAxxdydlBSdNrNwzoOnEnoKtkJDFKCGNTGjNixc5uJgeg0_rcGIvA7uICAY_BwUeYMLusygFZcFdnzHUWbFGfB3D2UpspugoWv7FXvHjFA9S3veuW0yjg5Rj6kgzM3QOe-PGxW8XPGPxUj3g4P-Gt74"
     },
     {
-      "productId": 6577822503,
-      "productName": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰, BLP-BE331W, 화이트, 5시간, BLP-BE331W, 화이트",
-      "productPrice": 28800,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577822503&itemId=14790109733&vendorItemId=90822605251&traceid=V0-153-9ef69fee5310d3be&clickBeacon=d17f2da0-8da1-11f1-98da-25d01fbb465e%7E3&requestid=20260801210916897257836946&token=31850C%7CMIXED"
+      "productId": 9520015544,
+      "productName": "레디보드 대용량 와이어 리빙박스, 4개, 그레이",
+      "productPrice": 71700,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9520015544&itemId=28378565656&vendorItemId=95537165221&traceid=V0-153-10c50bbf7761e774&clickBeacon=d1209610-8da5-11f1-8054-aac4820b1a3b%7E3&requestid=20260801213754265282479149&token=31850C%7CMIXED",
+      "productImage": "https://ads-partners.coupang.com/image1/dpa7KWGPVkz--NXYdifSSdygU7Qlu2xbzBpAI3iXltlfZcx3Zk3sl8SuHunGBlW9iIOFYC35yjaJUtdSqLgBuBF243tjZR17uzSWPhtIp-HUXpnRoEYt2d7VcHnFE_On9dav9xbpPptqIztePXnJq6rZDS-ccNtesyqEnrLYnl7GaghPsykX5ZBxFvx787LUokWkkSS1dFs8LPaQR7ifdYxSAwuhE43ZdooEfCX0reto_KrINPEBnjcSkQXZtP-O927C_2TrxZya3EIYEAXPWVuGKgnlAKJmC8yEeROgoHXRuIzwf1nH0LRiHA=="
     }
   ],
   "cardFiles": [
@@ -47,84 +52,84 @@
     "07-cta.jpg"
   ],
   "cardPaths": [
-    "published/cards/2026-08-01T12-09-16-410Z/01-cover.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/02-product.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/03-product.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/04-product.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/05-product.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/06-product.jpg",
-    "published/cards/2026-08-01T12-09-16-410Z/07-cta.jpg"
+    "published/cards/2026-08-01T12-37-53-739Z/01-cover.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/02-product.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/03-product.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/04-product.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/05-product.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/06-product.jpg",
+    "published/cards/2026-08-01T12-37-53-739Z/07-cta.jpg"
   ],
-  "caption": "책상 위 잔소리 없는 IT 액세서리 5종을 정리했습니다 🖥️\n무소음 마우스는 카페나 사무실처럼 소리 신경 쓰이는 공간에서 찾는 분들이 많고요, 기계식 키보드는 타건감을 중요하게 보는 분들에게 맞는 라인입니다.\nC타입 포트 하나로 버티는 노트북이라면 8in1 멀티허브가 확장 역할을 해주고, 메탈 거치대는 발열과 목 각도를 같이 잡는 용도예요.\nENC 이어폰은 통화·화상회의 비중이 높은 분들이 눈여겨보는 제품입니다 🎧\n가격대는 1만 원대부터 5만 원대까지, 필요한 것만 골라 채우기 좋은 구성입니다.\n제품 정보는 저장해두고 필요할 때 확인해보세요 📌\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #무선마우스 #무소음마우스 #기계식키보드 #게이밍키보드 #USB허브 #멀티허브 #노트북거치대 #쿨링패드 #블루투스이어폰 #노이즈캔슬링 #데스크테리어 #책상템 #가성비템 #자기계발용품",
+  "caption": "집 안 정리와 생활 편의를 채워주는 아이템 5가지를 모아봤어요 🧺\n주방 자투리 공간이 아쉽다면 이동식 전자레인지 선반, 욕실 청소도구가 늘 눅눅하다면 스텐 304 걸이가 대안이 됩니다.\n운전 중 내비 시야가 불편한 분들에겐 송풍구형 거치대, 물 마시는 습관을 만들고 싶다면 316L 대용량 보온보냉 텀블러가 눈에 띄어요 🚗\n계절 옷이나 잡동사니가 쌓인다면 대용량 와이어 리빙박스로 한 번에 정리하는 방법도 있고요.\n가격대는 1만 9천원부터 7만원대까지, 필요한 공간부터 하나씩 채워보시면 좋겠습니다 ✨\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#갓성비템 #생활용품추천 #주방수납 #전자레인지선반 #욕실정리 #스텐걸이 #차량용거치대 #송풍구거치대 #보온보냉텀블러 #스텐텀블러 #리빙박스 #정리수납 #자취템 #살림템 #쿠팡템",
   "hashtags": [
-    "#IT액세서리",
-    "#무선마우스",
-    "#무소음마우스",
-    "#기계식키보드",
-    "#게이밍키보드",
-    "#USB허브",
-    "#멀티허브",
-    "#노트북거치대",
-    "#쿨링패드",
-    "#블루투스이어폰",
-    "#노이즈캔슬링",
-    "#데스크테리어",
-    "#책상템",
-    "#가성비템",
-    "#자기계발용품"
+    "#갓성비템",
+    "#생활용품추천",
+    "#주방수납",
+    "#전자레인지선반",
+    "#욕실정리",
+    "#스텐걸이",
+    "#차량용거치대",
+    "#송풍구거치대",
+    "#보온보냉텀블러",
+    "#스텐텀블러",
+    "#리빙박스",
+    "#정리수납",
+    "#자취템",
+    "#살림템",
+    "#쿠팡템"
   ],
   "deeplinks": [
     {
-      "originalUrl": "https://www.coupang.com/vp/products/9075003138",
-      "shortenUrl": "https://link.coupang.com/a/fRuuEp0TKe",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9075003138&traceid=V0-183-31c96b9edafa64ee"
+      "originalUrl": "https://www.coupang.com/vp/products/8765366099",
+      "shortenUrl": "https://link.coupang.com/a/fRwxtie4wm",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8765366099&traceid=V0-183-bd3249ba1f1b195b"
     },
     {
-      "originalUrl": "https://www.coupang.com/vp/products/6764000977",
-      "shortenUrl": "https://link.coupang.com/a/fRuuEwaZcy",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&traceid=V0-183-cb44dda131dada70"
+      "originalUrl": "https://www.coupang.com/vp/products/9542729589",
+      "shortenUrl": "https://link.coupang.com/a/fRwxtmOORw",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9542729589&traceid=V0-183-f155beee441d96e5"
     },
     {
-      "originalUrl": "https://www.coupang.com/vp/products/8437036767",
-      "shortenUrl": "https://link.coupang.com/a/fRuuEBmQWP",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&traceid=V0-183-418b673908b0c579"
+      "originalUrl": "https://www.coupang.com/vp/products/9478012300",
+      "shortenUrl": "https://link.coupang.com/a/fRwxtsg9pA",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9478012300&traceid=V0-183-37dac9b758b46b20"
     },
     {
-      "originalUrl": "https://www.coupang.com/vp/products/6577832726",
-      "shortenUrl": "https://link.coupang.com/a/fRuuEHKAsm",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&traceid=V0-183-db7e44d89bf59bbe"
+      "originalUrl": "https://www.coupang.com/vp/products/9265027008",
+      "shortenUrl": "https://link.coupang.com/a/fRwxtwq01A",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9265027008&traceid=V0-183-a4e907d889a00045"
     },
     {
-      "originalUrl": "https://www.coupang.com/vp/products/6577822503",
-      "shortenUrl": "https://link.coupang.com/a/fRuuEMIN9o",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577822503&traceid=V0-183-9ef69fee5310d3be"
+      "originalUrl": "https://www.coupang.com/vp/products/9520015544",
+      "shortenUrl": "https://link.coupang.com/a/fRwxtA0LmK",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9520015544&traceid=V0-183-10c50bbf7761e774"
     }
   ],
   "links": [
     {
-      "name": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스",
-      "price": 13500,
-      "url": "https://link.coupang.com/a/fRuuEp0TKe"
+      "name": "Sonipure 수납선반 전자레인지선반 주방선반 다용도 이동 금속 거치대",
+      "price": 19800,
+      "url": "https://link.coupang.com/a/fRwxtie4wm"
     },
     {
-      "name": "에이투 게이밍 LED 유선 기계식 풀키 키보드",
-      "price": 59900,
-      "url": "https://link.coupang.com/a/fRuuEwaZcy"
+      "name": "[평생쓰는] 빛나온 스텐 304 욕실 청소도구 걸이",
+      "price": 19000,
+      "url": "https://link.coupang.com/a/fRwxtmOORw"
     },
     {
-      "name": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브",
-      "price": 32300,
-      "url": "https://link.coupang.com/a/fRuuEBmQWP"
+      "name": "디에스 차량용 핸드폰 거치대 송풍구형",
+      "price": 35000,
+      "url": "https://link.coupang.com/a/fRwxtsg9pA"
     },
     {
-      "name": "홈플래닛 메탈 쿨링홀 노트북 거치대",
-      "price": 16490,
-      "url": "https://link.coupang.com/a/fRuuEHKAsm"
+      "name": "세다가 C820 사이버 세라믹 316L 스테인리스 대용량 보온보냉 텀블러 (빨대/손잡이)",
+      "price": 59800,
+      "url": "https://link.coupang.com/a/fRwxtwq01A"
     },
     {
-      "name": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰",
-      "price": 28800,
-      "url": "https://link.coupang.com/a/fRuuEMIN9o"
+      "name": "레디보드 대용량 와이어 리빙박스",
+      "price": 71700,
+      "url": "https://link.coupang.com/a/fRwxtA0LmK"
     }
   ]
 }
