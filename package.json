@@ -1,0 +1,25 @@
+{
+  "name": "atoztem-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "atoztem 인스타그램 쿠팡 파트너스 무인 수익화 파이프라인",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test:coupang": "node scripts/test-coupang.js",
+    "test:select": "node scripts/test-select.js",
+    "test:cards": "node scripts/test-cards.js",
+    "test:caption": "node scripts/test-caption.js",
+    "make:shorts": "node scripts/make-shorts.js",
+    "run:pipeline": "node src/index.js",
+    "pipeline:generate": "node scripts/generate.js",
+    "pipeline:publish": "node scripts/publish.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "msedge-tts": "^2.0.7",
+    "puppeteer": "^25.4.0"
+  }
+}

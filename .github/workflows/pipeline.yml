@@ -1,0 +1,75 @@
+name: atoztem 자동 게시
+
+on:
+  schedule:
+    # 매일 KST 오전 8시 (UTC 23시). 안정화 전까지 하루 1회.
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+    # 수동 트리거 (첫 게시 테스트용)
+    inputs:
+      dry_run:
+        description: '게시하지 않고 생성만 (1=예)'
+        required: false
+        default: '0'
+
+# 카드/로그를 저장소에 커밋하기 위한 쓰기 권한
+permissions:
+  contents: write
+
+concurrency:
+  group: atoztem-pipeline
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 한글 폰트 설치 (카드 렌더링용)
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+
+      # ── 1단계: 카드 + 캡션 생성 ──────────────────────────
+      - name: 생성 (①~④)
+        env:
+          COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
+          COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run pipeline:generate
+
+      # 생성된 카드/매니페스트를 커밋 → raw URL 로 공개
+      - name: 카드 커밋 & 푸시
+        run: |
+          git config user.name "atoztem-bot"
+          git config user.email "bot@atoztem.local"
+          git add published/
+          git commit -m "cards: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
+          git push
+
+      # ── 2단계: 게시 ────────────────────────────────────
+      - name: 게시 (⑤~⑥)
+        if: ${{ github.event.inputs.dry_run != '1' }}
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/published/cards
+        run: npm run pipeline:publish
+
+      # posted_log 갱신분 커밋
+      - name: 로그 커밋 & 푸시
+        if: ${{ github.event.inputs.dry_run != '1' }}
+        run: |
+          git config user.name "atoztem-bot"
+          git config user.email "bot@atoztem.local"
+          git add data/posted_log.json
+          git commit -m "log: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
+          git push
