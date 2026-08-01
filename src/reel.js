@@ -104,47 +104,65 @@ export async function buildReel(cardPaths, opts = {}) {
   const silentVideo = join(tmp, 'video.mp4');
   await ff(['-f', 'concat', '-safe', '0', '-i', vlist, '-c', 'copy', silentVideo]);
 
-  const total = durations.reduce((a, b) => a + b, 0);
-
-  // 4) 내레이션 트랙: 카드별 (무음 L초 + 대사 LEAD 지점 삽입) → 이어붙임
-  const segs = [];
+  // 각 카드의 대사 시작 시각(초) 계산
+  const starts = [];
+  let acc = 0;
   for (let i = 0; i < cardPaths.length; i++) {
-    const seg = join(tmp, `a${i}.m4a`);
-    const L = durations[i].toFixed(2);
-    if (narr[i]?.file) {
-      await ff([
-        '-f', 'lavfi', '-t', L, '-i', 'anullsrc=r=44100:cl=stereo',
-        '-i', resolve(narr[i].file),
-        '-filter_complex',
-        `[1:a]aresample=44100,adelay=${Math.round(LEAD * 1000)}|${Math.round(LEAD * 1000)}[d];` +
-          `[0:a][d]amix=inputs=2:duration=first:normalize=0[a]`,
-        '-map', '[a]', '-t', L, '-c:a', 'aac', seg,
-      ]);
-    } else {
-      await ff(['-f', 'lavfi', '-t', L, '-i', 'anullsrc=r=44100:cl=stereo', '-c:a', 'aac', seg]);
-    }
-    segs.push(seg);
+    starts.push(acc + LEAD);
+    acc += durations[i];
   }
-  const alist = join(tmp, 'a.txt');
-  writeFileSync(alist, segs.map((c) => `file '${c.replace(/\\/g, '/')}'`).join('\n'));
-  const narration = join(tmp, 'narration.m4a');
-  await ff(['-f', 'concat', '-safe', '0', '-i', alist, '-c', 'copy', narration]);
+  const total = acc;
 
-  // 5) 최종 오디오: 내레이션 + 배경음(ducked) 믹스
+  // 4~5) 오디오: 각 대사를 시작 시각에 배치(adelay) → amix, 배경음 ducked 믹스 (한 그래프)
   const bgm = opts.bgmPath && existsSync(opts.bgmPath) ? opts.bgmPath : null;
   const finalAudio = join(tmp, 'final.m4a');
-  if (bgm) {
-    await ff([
-      '-i', narration, '-stream_loop', '-1', '-i', resolve(bgm),
-      '-filter_complex',
-      `[1:a]volume=0.16[bg];` +
-        `[0:a][bg]amix=inputs=2:duration=first:normalize=0,` +
-        `afade=t=out:st=${(total - 1.2).toFixed(2)}:d=1.2[a]`,
-      '-map', '[a]', '-t', total.toFixed(2), '-c:a', 'aac', '-b:a', '160k', finalAudio,
-    ]);
-  } else {
-    await ff(['-i', narration, '-c:a', 'aac', finalAudio]);
+
+  const inputs = [];
+  const parts = [];
+  const mixLabels = [];
+  let inIdx = 0;
+  for (let i = 0; i < cardPaths.length; i++) {
+    if (!narr[i]?.file) continue;
+    inputs.push('-i', resolve(narr[i].file));
+    const ms = Math.round(starts[i] * 1000);
+    parts.push(
+      `[${inIdx}:a]aresample=44100,aformat=channel_layouts=stereo,adelay=${ms}:all=1[n${inIdx}]`
+    );
+    mixLabels.push(`[n${inIdx}]`);
+    inIdx++;
   }
+
+  let fc;
+  if (mixLabels.length === 0) {
+    // 대사가 전혀 없으면 무음 입력(input 0)을 그대로
+    fc = `[0:a]anull[spoken]`;
+  } else {
+    fc = parts.join(';') + ';';
+    fc +=
+      mixLabels.length > 1
+        ? `${mixLabels.join('')}amix=inputs=${mixLabels.length}:duration=longest:normalize=0[sp0];`
+        : `${mixLabels[0]}anull[sp0];`;
+    fc += `[sp0]apad=whole_dur=${total.toFixed(2)}[spoken]`;
+  }
+
+  const args = [];
+  if (mixLabels.length === 0) {
+    args.push('-f', 'lavfi', '-t', total.toFixed(2), '-i', 'anullsrc=r=44100:cl=stereo');
+  } else {
+    args.push(...inputs);
+  }
+  if (bgm) {
+    args.push('-stream_loop', '-1', '-i', resolve(bgm));
+    const bgmIdx = mixLabels.length === 0 ? 1 : inIdx;
+    fc +=
+      `;[${bgmIdx}:a]volume=0.16,aresample=44100,aformat=channel_layouts=stereo[bg];` +
+      `[spoken][bg]amix=inputs=2:duration=first:normalize=0,` +
+      `afade=t=out:st=${(total - 1.2).toFixed(2)}:d=1.2[out]`;
+  } else {
+    fc += `;[spoken]afade=t=out:st=${(total - 1.0).toFixed(2)}:d=1.0[out]`;
+  }
+  args.push('-filter_complex', fc, '-map', '[out]', '-t', total.toFixed(2), '-c:a', 'aac', '-b:a', '160k', finalAudio);
+  await ff(args);
 
   // 6) 영상 + 오디오 합치기
   await ff([

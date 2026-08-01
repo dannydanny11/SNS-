@@ -3,10 +3,6 @@
 .env.local
 *.key
 
-# 저작권 음원 — 공개 저장소 재배포 방지 (원본 파일은 로컬 보관)
-assets/*.mp3
-assets/*.wav
-
 # 의존성
 node_modules/
 
