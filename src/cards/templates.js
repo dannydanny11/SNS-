@@ -33,17 +33,29 @@ function shell(t, inner, bg, fg) {
 </style></head><body>${inner}</body></html>`;
 }
 
-/** 표지(훅) 카드 */
-export function buildCover(theme, { headline, category, total }) {
+/** 표지(훅) 카드 — 제품 이미지 콜라주 + 훅 (썸네일 역할) */
+export function buildCover(theme, { headline, category, total, products = [] }) {
   const t = theme;
+  const tiles = products
+    .slice(0, 4)
+    .map(
+      (p) =>
+        `<div style="background:#fff; border-radius:26px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+           <img src="${escapeHtml(p.productImage)}" style="width:100%; height:100%; object-fit:cover;">
+         </div>`
+    )
+    .join('');
   const inner = `
-  <div class="card" style="padding:96px 84px; justify-content:center;">
-    <div class="brand" style="top:72px; left:84px; color:${t.accent}; font-size:34px;">atoztem</div>
-    <div style="font-size:40px; color:${t.sub}; font-weight:600; margin-bottom:28px;">${escapeHtml(category)}</div>
-    <div style="font-size:104px; font-weight:900; line-height:1.15; letter-spacing:-2px;">${escapeHtml(headline)}</div>
-    <div style="margin-top:56px; display:inline-flex; align-items:center; gap:16px;">
-      <span style="background:${t.accent}; color:#fff; font-size:38px; font-weight:800; padding:14px 34px; border-radius:999px;">BEST ${total}</span>
-      <span style="font-size:36px; color:${t.sub};">밀어서 보기 →</span>
+  <div class="card" style="padding:66px; flex-direction:column;">
+    <div style="color:${t.accent}; font-size:34px; font-weight:800; letter-spacing:2px;">atoztem</div>
+    <div style="margin-top:22px; font-size:36px; color:${t.sub}; font-weight:700;">${escapeHtml(category)}</div>
+    <div style="margin-top:10px; font-size:78px; font-weight:900; line-height:1.14; letter-spacing:-2px; white-space:pre-line;">${escapeHtml(headline)}</div>
+    <div style="margin-top:26px; display:flex; align-items:center; gap:16px;">
+      <span style="background:${t.accent}; color:#fff; font-size:34px; font-weight:800; padding:12px 30px; border-radius:999px;">BEST ${total}</span>
+      <span style="font-size:32px; color:${t.sub};">밀어서 보기 →</span>
+    </div>
+    <div style="margin-top:34px; flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:18px;">
+      ${tiles}
     </div>
   </div>`;
   return shell(t, inner, t.coverBg, t.coverFg);

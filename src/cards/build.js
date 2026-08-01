@@ -26,6 +26,7 @@ export async function buildPostCards(post, outDir) {
     headline: category.headline || category.name,
     category: category.name,
     total,
+    products,
   });
   const coverPath = `${outDir}/01-cover.jpg`;
   writeFileSync(coverPath, await renderCard(coverHtml));

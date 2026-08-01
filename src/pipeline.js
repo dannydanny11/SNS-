@@ -65,12 +65,20 @@ export async function generate() {
   const outDir = `${PUB_DIR}/cards/${runId}`;
   const cardPaths = await buildPostCards(post, outDir);
 
-  // 릴스 영상 생성 (카드 → 9:16 mp4). 배경음: assets/reel-bgm.mp3 (있으면)
+  // 릴스 영상 생성 (카드 → 9:16 mp4). 내레이션(카드별 대사) + 배경음.
   const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
   const bgmPath = 'assets/reel-bgm.mp3';
+  const narration = [
+    `오늘은 ${category.name}, ${products.length}가지 골라봤어요`,
+    ...products.map(
+      (p) => `${p.copy}. ${p.productPrice?.toLocaleString('ko-KR')}원이에요`
+    ),
+    `마음에 들면 프로필 링크에서 확인하세요`,
+  ];
   await buildReel(cardPaths, {
     outPath: reelPath,
     bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
+    narration,
   });
 
   const manifest = {
