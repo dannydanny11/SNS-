@@ -22,25 +22,29 @@ function hasForbidden(s = '') {
 }
 
 const SYSTEM_PROMPT = `너는 한국 유튜브 쇼츠 채널 'atoztem'의 대본 작가다.
-쿠팡에서 찾은 가성비 제품 1개를 30~40초 세로 쇼츠로 소개한다.
+쿠팡에서 찾은 가성비 제품 1개를 45~60초 세로 쇼츠로 소개한다.
+
+목표: 시청자가 "오 이거 괜찮네" 하고 링크를 누르게 만든다. 제품의 매력포인트를 구체적으로 살려라.
 
 규칙(반드시):
-- 톤: "이런 제품이 있다 / 이런 사람에게 좋다" 식 담백한 정보 큐레이션. 과장·낚시·허위 금지.
+- 톤: "이런 제품이 있다 / 이런 사람에게 좋다" 식 정보 큐레이션 + 셀링. 과장·낚시·허위는 금지하되, 장점은 매력적으로.
 - 금지 표현: "직접 써봤다","사용해보니","내돈내산","후기" 등 본인이 쓰거나 샀다는 뉘앙스.
-- 캡션(화면 자막)은 짧고 강하게. 나레이션(대사)은 말맛 있게, 각 1~2문장.
-- points 는 제품의 실제 셀링포인트(용도/편의/가성비). 스펙을 지어내지 말 것.
-- 이모지 남발 금지.
+- 캡션(화면 자막)은 짧고 강하게(한 줄). 나레이션(대사)은 각 2문장으로 충분히 말한다(너무 짧지 않게).
+- points 는 3개. 각 포인트는 '무엇이 왜 좋은지'를 구체적으로: 용도/편의/디자인/가성비/이런사람에게 좋음 등. 없는 스펙을 지어내지 말 것.
+- hook 은 스크롤을 멈추게: 가격 궁금증·문제상황·"이거 하나면" 류로 강하게.
+- cta 는 클릭 유도: "고민되면 링크에서 가격이랑 상세정보 확인" 같이 자연스럽게 행동 유도. ('후기' 라는 단어는 쓰지 말 것)
+- 이모지 남발 금지(0~1개).
 
 반드시 아래 JSON 만 출력:
 {
   "hook_caption": "훅 자막 (한 줄, 12자 내외)",
-  "hook_line": "훅 나레이션",
+  "hook_line": "훅 나레이션 (2문장, 궁금증 유발)",
   "product_caption": "상품슬라이드 짧은 태그라인 (8자 내외, 없으면 빈문자열)",
-  "product_line": "상품 소개 나레이션",
-  "points": [ {"caption":"포인트 자막(한 줄)","line":"포인트 나레이션"}, ... 정확히 2개 ],
+  "product_line": "상품 소개 나레이션 (2문장, 어떤 제품이고 왜 눈길 가는지)",
+  "points": [ {"caption":"포인트 자막(한 줄)","line":"포인트 나레이션(2문장, 구체적 장점)"}, ... 정확히 3개 ],
   "cta_caption": "마무리 자막 (한 줄)",
-  "cta_line": "마무리 나레이션",
-  "title": "유튜브 제목 (해시태그 없이, 40자 내외)",
+  "cta_line": "마무리 나레이션 (2문장, 링크 클릭 유도)",
+  "title": "유튜브 제목 (해시태그 없이, 40자 내외, 클릭 유도형)",
   "description": "유튜브 설명 본문 2~3줄 (링크/고지문구 제외)",
   "hashtags": ["#쇼츠","#가성비", ... 8~12개]
 }`;
@@ -52,18 +56,19 @@ export function templateScript(product, category) {
   const cat = category?.name || '가성비템';
   return {
     hook_caption: `이 가격 실화?`,
-    hook_line: `요즘 ${cat} 찾는다면 이거 한 번 보세요.`,
+    hook_line: `요즘 ${cat} 하나쯤 찾고 계셨다면 이건 꼭 보세요. 가격 보고 놀라실 수도 있어요.`,
     product_caption: category?.tier === 'high' ? '가성비 甲' : '',
-    product_line: `${name}, 가격은 ${price}대예요.`,
+    product_line: `오늘 소개할 건 ${name}예요. 가격은 ${price}대인데 기본기가 탄탄한 편이라 눈길이 갑니다.`,
     points: [
-      { caption: '일상에서 매일 씀', line: `${cat} 중에서도 활용도가 높은 편이에요.` },
-      { caption: '이 가격이면 부담 없죠', line: `부담 없는 가격이라 처음 들이기 좋아요.` },
+      { caption: '매일 쓰는 실용템', line: `${cat} 중에서도 활용도가 높아 한 번 들이면 매일 손이 가요. 괜히 사놓고 안 쓰는 물건이 아니에요.` },
+      { caption: '군더더기 없는 디자인', line: `디자인이 깔끔해서 어디에 둬도 잘 어울려요. 책상이든 가방이든 자리 차지도 적습니다.` },
+      { caption: '이 가격이면 부담 zero', line: `${price}대라 처음 들이기에 부담이 없어요. 실패해도 아깝지 않은 가격대라 입문용으로 딱이에요.` },
     ],
-    cta_caption: '마음에 들었다면',
-    cta_line: `구매 링크는 아래에 남겨둘게요.`,
-    title: `${name} | ${cat} 가성비템`,
-    description: `${cat} 찾는 분들을 위한 ${name} 소개 영상입니다.\n가격대와 특징을 짧게 정리했어요.`,
-    hashtags: ['#쇼츠', '#가성비', '#쿠팡', `#${cat.replace(/[^가-힣a-zA-Z0-9]/g, '')}`, '#추천템', '#자취템', '#꿀템', '#atoztem'],
+    cta_caption: '고민된다면',
+    cta_line: `조금이라도 끌렸다면 아래 링크에서 가격이랑 상세정보 확인해 보세요. 지금 가격이 계속 가는 건 아니거든요.`,
+    title: `${name} | 이 가격에 이 정도면 ${cat} 가성비 甲`,
+    description: `${cat} 찾는 분들을 위한 ${name} 소개 영상입니다.\n어떤 점이 좋은지, 어떤 사람에게 맞는지 짧게 정리했어요.`,
+    hashtags: ['#쇼츠', '#가성비', '#쿠팡', `#${cat.replace(/[^가-힣a-zA-Z0-9]/g, '')}`, '#추천템', '#자취템', '#꿀템', '#가성비템', '#atoztem'],
   };
 }
 
@@ -110,8 +115,8 @@ export async function generateShortsScript(product, category) {
   }
   if (!raw) raw = templateScript(product, category);
 
-  const points = (raw.points || []).slice(0, 2);
-  while (points.length < 2) points.push({ caption: '', line: '' });
+  const points = (raw.points || []).slice(0, 3);
+  while (points.length < 3) points.push({ caption: '', line: '' });
 
   // 슬라이드 정의(렌더 순서) + 슬라이드별 나레이션
   const slides = [
@@ -119,6 +124,7 @@ export async function generateShortsScript(product, category) {
     { kind: 'product', caption: raw.product_caption, narration: raw.product_line },
     { kind: 'point', index: 1, caption: points[0].caption, narration: points[0].line },
     { kind: 'point', index: 2, caption: points[1].caption, narration: points[1].line },
+    { kind: 'point', index: 3, caption: points[2].caption, narration: points[2].line },
     { kind: 'cta', caption: raw.cta_caption, narration: raw.cta_line },
   ];
   const narration = slides.map((s) => s.narration || '');

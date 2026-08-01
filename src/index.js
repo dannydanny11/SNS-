@@ -42,8 +42,11 @@ async function main() {
       `🧪 DRY_RUN 완료 [${m.category.name}]\n상품: ${names}\n카드 ${m.cardFiles.length}장\n\n${m.caption}`
     );
   } else {
+    const posted = [];
+    if (result.carousel) posted.push(`캐러셀: ${result.carousel.permalink || result.carousel.postId}`);
+    if (result.reel) posted.push(`릴스: ${result.reel.permalink || result.reel.postId}`);
     await notify(
-      `✅ atoztem 게시 완료 [${m.category.name}]\n상품: ${names}\n${result.permalink || result.postId}`
+      `✅ atoztem 게시 완료 [${m.category.name}]\n상품: ${names}\n${posted.join('\n')}`
     );
   }
 }

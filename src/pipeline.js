@@ -7,7 +7,10 @@ import { generateCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
 import { publishCarousel } from './instagram.js';
 import { buildLinkPage } from './linkPage.js';
+import { buildReel } from './reel.js';
+import { publishReel } from './instagram.js';
 import { addEntry } from './archive.js';
+import { existsSync } from 'node:fs';
 import { appendPosted } from './postedLog.js';
 import { requireEnv } from './config.js';
 import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
@@ -62,8 +65,17 @@ export async function generate() {
   const outDir = `${PUB_DIR}/cards/${runId}`;
   const cardPaths = await buildPostCards(post, outDir);
 
+  // 릴스 영상 생성 (카드 → 9:16 mp4). 배경음: assets/reel-bgm.mp3 (있으면)
+  const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
+  const bgmPath = 'assets/reel-bgm.mp3';
+  await buildReel(cardPaths, {
+    outPath: reelPath,
+    bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
+  });
+
   const manifest = {
     runId,
+    reelFile: `${runId}/reel.mp4`,
     category: { id: category.id, name: category.name, tier: category.tier },
     products: products.map((p) => ({
       productId: p.productId,
@@ -111,17 +123,28 @@ export function readManifest() {
  */
 export async function publish(manifest) {
   const imageBase = requireEnv('IMAGE_BASE_URL').replace(/\/$/, '');
-  const imageUrls = manifest.cardFiles.map(
-    (f) => `${imageBase}/${manifest.runId}/${f}`
-  );
+  // 영상 베이스: .../published/cards → .../published
+  const pubBase = imageBase.replace(/\/cards$/, '');
+  const format = (process.env.POST_FORMAT || 'carousel').toLowerCase(); // carousel | reel | both
 
-  const result = await publishCarousel({
-    imageUrls,
-    caption: manifest.caption,
-  });
+  const out = {};
+
+  if (format === 'carousel' || format === 'both') {
+    const imageUrls = manifest.cardFiles.map(
+      (f) => `${imageBase}/${manifest.runId}/${f}`
+    );
+    const r = await publishCarousel({ imageUrls, caption: manifest.caption });
+    out.carousel = { postId: r.id, permalink: r.permalink };
+  }
+
+  if (format === 'reel' || format === 'both') {
+    const videoUrl = `${pubBase}/reels/${manifest.reelFile}`;
+    const r = await publishReel({ videoUrl, caption: manifest.caption });
+    out.reel = { postId: r.id, permalink: r.permalink };
+  }
 
   // 로그 기록 (tier 포함)
   appendPosted(manifest.products, manifest.category);
 
-  return { postId: result.id, permalink: result.permalink };
+  return out;
 }

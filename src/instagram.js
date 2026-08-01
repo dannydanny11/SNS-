@@ -95,3 +95,43 @@ export async function publishCarousel({ imageUrls, caption }) {
 
   return { id: published.id, permalink };
 }
+
+/**
+ * 릴스 게시 (media_type=REELS). 영상은 공개 URL 이어야 함.
+ * @param {{videoUrl:string, caption:string, shareToFeed?:boolean}} args
+ * @returns {Promise<{id:string, permalink?:string}>}
+ */
+export async function publishReel({ videoUrl, caption, shareToFeed = true }) {
+  const igUserId = requireEnv('IG_USER_ID');
+  const token = requireEnv('IG_ACCESS_TOKEN');
+
+  // 1) 릴스 컨테이너 생성
+  const container = await graphPost(`${igUserId}/media`, {
+    media_type: 'REELS',
+    video_url: videoUrl,
+    caption,
+    share_to_feed: shareToFeed ? 'true' : 'false',
+    access_token: token,
+  });
+
+  // 영상은 처리에 시간이 더 걸림 — 넉넉히 대기
+  await waitReady(container.id, token, { tries: 40, intervalMs: 4000 });
+
+  // 2) 발행
+  const published = await graphPost(`${igUserId}/media_publish`, {
+    creation_id: container.id,
+    access_token: token,
+  });
+
+  let permalink;
+  try {
+    const info = await fetch(
+      `${GRAPH}/${published.id}?fields=permalink&access_token=${token}`
+    ).then((r) => r.json());
+    permalink = info.permalink;
+  } catch {
+    /* ignore */
+  }
+
+  return { id: published.id, permalink };
+}

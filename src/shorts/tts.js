@@ -19,6 +19,9 @@ export async function synthesize(lines, outDir) {
   mkdirSync(outDir, { recursive: true });
   const voice = optionalEnv('TTS_VOICE') || DEFAULT_VOICE;
 
+  // 말 속도: .env 의 TTS_RATE (예: '+12%', 'fast') 로 조절, 기본 +12% (조금 빠르게)
+  const rate = optionalEnv('TTS_RATE') || '+12%';
+
   const tts = new MsEdgeTTS();
   await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
 
@@ -32,7 +35,7 @@ export async function synthesize(lines, outDir) {
       continue;
     }
     // toFile 은 디렉터리를 받아 임의 파일명으로 저장 → 원하는 이름으로 이동
-    const { audioFilePath } = await tts.toFile(outDir, text);
+    const { audioFilePath } = await tts.toFile(outDir, text, { rate });
     if (existsSync(target)) {
       // 이전 실행 잔여물 방지
     }

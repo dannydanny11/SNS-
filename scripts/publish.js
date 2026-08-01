@@ -7,9 +7,12 @@ async function main() {
   const names = manifest.products.map((p) => p.productName.split(',')[0]).join(', ');
   try {
     const res = await publish(manifest);
+    const posted = [];
+    if (res.carousel) posted.push(`캐러셀: ${res.carousel.permalink || res.carousel.postId}`);
+    if (res.reel) posted.push(`릴스: ${res.reel.permalink || res.reel.postId}`);
     const linkList = (manifest.links || []).map((l) => `• ${l.name}\n${l.url}`).join('\n');
     await notify(
-      `✅ atoztem 게시 완료 [${manifest.category.name}]\n${res.permalink || res.postId}\n\n📎 프로필 링크에 넣을 제휴 링크:\n${linkList}`
+      `✅ atoztem 게시 완료 [${manifest.category.name}]\n${posted.join('\n')}\n\n📎 프로필 링크에 넣을 제휴 링크:\n${linkList}`
     );
   } catch (e) {
     await notify(`❌ atoztem 게시 실패 [${manifest.category.name}]\n${e.message}`);
