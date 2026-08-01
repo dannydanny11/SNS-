@@ -1,5 +1,5 @@
 {
-  "runId": "2026-08-01T11-45-48-089Z",
+  "runId": "2026-08-01T11-53-08-892Z",
   "category": {
     "id": "it",
     "name": "IT 액세서리",
@@ -7,34 +7,34 @@
   },
   "products": [
     {
-      "productId": 9075003138,
-      "productName": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스, 화이트, MVM1",
-      "productPrice": 13500,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9075003138&itemId=26655329807&vendorItemId=93627786802&traceid=V0-153-31c96b9edafa64ee&clickBeacon=88e3b690-8d9e-11f1-965c-842d13bf81ad%7E3&requestid=20260801204546592141625567&token=31850C%7CMIXED"
+      "productId": 2352716938,
+      "productName": "PANWEST PANWEST-PW815 무선 마우스, PANWEST-PW815, 라이트블루",
+      "productPrice": 10500,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=2352716938&itemId=4081597101&vendorItemId=82815202941&traceid=V0-153-afc38779e2919526&clickBeacon=8fb31230-8d9f-11f1-af82-f9d767337211%7E3&requestid=20260801205307518073864053&token=31850C%7CMIXED"
     },
     {
       "productId": 6764000977,
       "productName": "에이투 게이밍 LED 유선 기계식 풀키 키보드, 블랙, AG0302, 적축",
       "productPrice": 59900,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=890ff6b0-8d9e-11f1-be92-cdb8fa52987e%7E3&requestid=20260801204546888277910983&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=8fdf5250-8d9f-11f1-b7cb-3e2b5d1be577%7E3&requestid=20260801205307813206526103&token=31850C%7CMIXED"
     },
     {
-      "productId": 8638721510,
-      "productName": "시그델 7in1 USB 3.0 C타입 겸용 멀티 허브 7포트 USB*5 C타입*2 젠더 C to USB 노트북 컴퓨터 확장 포트 UH-01, 메탈실버",
-      "productPrice": 23900,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8638721510&itemId=25067994848&vendorItemId=92072125023&traceid=V0-153-ca816f496607cf77&clickBeacon=89361c50-8d9e-11f1-9033-4f4a3e94a1e9%7E3&requestid=20260801204547137211612468&token=31850C%7CMIXED"
+      "productId": 8437036767,
+      "productName": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브, 1개",
+      "productPrice": 32300,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=9001a760-8d9f-11f1-b229-a4d9647268c8%7E3&requestid=20260801205308028262469047&token=31850C%7CMIXED"
     },
     {
       "productId": 6577832726,
       "productName": "홈플래닛 메탈 쿨링홀 노트북 거치대",
       "productPrice": 16490,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801204547414183569554&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801205308333024747764&token=31850C%7CMIXED"
     },
     {
       "productId": 9359569491,
       "productName": "맨큐 무선 블루투스 이어폰, X08, 블랙",
       "productPrice": 69800,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&itemId=27770747901&vendorItemId=95469538242&traceid=V0-153-20a1e33ba49b0458&clickBeacon=898e9c90-8d9e-11f1-b90b-1ea3c6f3cf54%7E3&requestid=20260801204547706321536322&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&itemId=27770747901&vendorItemId=95469538242&traceid=V0-153-20a1e33ba49b0458&clickBeacon=9052fbb0-8d9f-11f1-b47c-6fabded070ee%7E3&requestid=20260801205308566211618271&token=31850C%7CMIXED"
     }
   ],
   "cardFiles": [
@@ -47,31 +47,30 @@
     "07-cta.png"
   ],
   "cardPaths": [
-    "published/cards/2026-08-01T11-45-48-089Z/01-cover.png",
-    "published/cards/2026-08-01T11-45-48-089Z/02-product.png",
-    "published/cards/2026-08-01T11-45-48-089Z/03-product.png",
-    "published/cards/2026-08-01T11-45-48-089Z/04-product.png",
-    "published/cards/2026-08-01T11-45-48-089Z/05-product.png",
-    "published/cards/2026-08-01T11-45-48-089Z/06-product.png",
-    "published/cards/2026-08-01T11-45-48-089Z/07-cta.png"
+    "published/cards/2026-08-01T11-53-08-892Z/01-cover.png",
+    "published/cards/2026-08-01T11-53-08-892Z/02-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/03-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/04-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/05-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/06-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/07-cta.png"
   ],
-  "caption": "책상 위 IT 액세서리, 가격대별로 정리해봤습니다 🖱️\n1. 아이리버 무소음 무선 마우스 (13,500원) — 듀얼모드 멀티페어링, 카페나 사무실처럼 조용한 공간용\n2. 에이투 LED 유선 기계식 키보드 (59,900원) — 풀배열이 필요한 분께\n3. 시그델 7in1 USB 3.0 C타입 멀티허브 (23,900원) — 포트 부족한 노트북 확장용\n4. 홈플래닛 메탈 쿨링홀 노트북 거치대 (16,490원) — 발열·목 각도 신경 쓰이는 분께\n5. 맨큐 무선 블루투스 이어폰 (69,800원) — 출퇴근 이동이 잦은 경우 고려해볼 만한 옵션\n가격은 시점에 따라 달라질 수 있으니 참고만 해주세요 💻✨\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #데스크셋업 #무선마우스 #무소음마우스 #기계식키보드 #USB허브 #멀티허브 #노트북거치대 #블루투스이어폰 #가성비템 #사무용품 #재택근무템 #책상정리 #쿠팡템 #아토즈템",
+  "caption": "책상 위 IT 액세서리, 가격대별로 한 번 정리해봤습니다 🖥️\n\n1만원대 무선 마우스(PANWEST PW815)는 서브 장비로 하나쯤 두기 좋은 가격대예요.\n타건감 위주라면 에이투 LED 유선 기계식 풀키 키보드(59,900원)가 입문 라인에 들어갑니다.\n포트가 부족한 노트북엔 베이직기어 버티컬 8in1 C타입 허브(10Gbps), 발열·자세가 신경 쓰이면 홈플래닛 메탈 쿨링홀 거치대가 대안이 됩니다 💻\n무선 청음은 맨큐 블루투스 이어폰(69,800원)까지 함께 묶어 봤어요.\n필요한 항목만 골라 담는 쪽이 합리적입니다 ✨\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #무선마우스 #기계식키보드 #USB허브 #노트북거치대 #블루투스이어폰 #데스크테리어 #책상꾸미기 #가성비템 #자취템 #사무용품 #쿠팡추천템 #atoztem #생활아이템",
   "hashtags": [
     "#IT액세서리",
-    "#데스크셋업",
     "#무선마우스",
-    "#무소음마우스",
     "#기계식키보드",
     "#USB허브",
-    "#멀티허브",
     "#노트북거치대",
     "#블루투스이어폰",
+    "#데스크테리어",
+    "#책상꾸미기",
     "#가성비템",
+    "#자취템",
     "#사무용품",
-    "#재택근무템",
-    "#책상정리",
-    "#쿠팡템",
-    "#아토즈템"
+    "#쿠팡추천템",
+    "#atoztem",
+    "#생활아이템"
   ],
   "deeplinks": []
 }
