@@ -1,5 +1,5 @@
 {
-  "runId": "2026-08-01T11-50-05-357Z",
+  "runId": "2026-08-01T11-53-08-892Z",
   "category": {
     "id": "it",
     "name": "IT 액세서리",
@@ -7,34 +7,34 @@
   },
   "products": [
     {
-      "productId": 8636050907,
-      "productName": "UGREEN 유그린 4000DPI 인체공학 버티컬 블루투스 무선 무소음 마우스 |손목보호| 멀티페어링| 4단계 DPI 조절| 지능형 절전 모드|맥북 태블릿 노트북 컴퓨터 PC 호환, Black, M571P",
-      "productPrice": 22500,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8636050907&itemId=25057765109&vendorItemId=92062037653&traceid=V0-153-f360528c5348fb44&clickBeacon=2338af70-8d9f-11f1-8bd7-419d40df91d4%7E3&requestid=20260801205005521082771366&token=31850C%7CMIXED"
+      "productId": 2352716938,
+      "productName": "PANWEST PANWEST-PW815 무선 마우스, PANWEST-PW815, 라이트블루",
+      "productPrice": 10500,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=2352716938&itemId=4081597101&vendorItemId=82815202941&traceid=V0-153-afc38779e2919526&clickBeacon=8fb31230-8d9f-11f1-af82-f9d767337211%7E3&requestid=20260801205307518073864053&token=31850C%7CMIXED"
     },
     {
       "productId": 6764000977,
       "productName": "에이투 게이밍 LED 유선 기계식 풀키 키보드, 블랙, AG0302, 적축",
       "productPrice": 59900,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=23470750-8d9f-11f1-91bf-dacefb6930a1%7E3&requestid=20260801205005617072966267&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=8fdf5250-8d9f-11f1-b7cb-3e2b5d1be577%7E3&requestid=20260801205307813206526103&token=31850C%7CMIXED"
     },
     {
       "productId": 8437036767,
       "productName": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브, 1개",
       "productPrice": 32300,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=23518ea0-8d9f-11f1-80e9-9fa65a4ca95a%7E3&requestid=20260801205005683282473033&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=9001a760-8d9f-11f1-b229-a4d9647268c8%7E3&requestid=20260801205308028262469047&token=31850C%7CMIXED"
     },
     {
       "productId": 6577832726,
       "productName": "홈플래닛 메탈 쿨링홀 노트북 거치대",
       "productPrice": 16490,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801205005761088737325&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801205308333024747764&token=31850C%7CMIXED"
     },
     {
       "productId": 9359569491,
       "productName": "맨큐 무선 블루투스 이어폰, X08, 블랙",
       "productPrice": 69800,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&itemId=27770747901&vendorItemId=95469538242&traceid=V0-153-20a1e33ba49b0458&clickBeacon=236b7f40-8d9f-11f1-9a09-c564d48ff2ad%7E3&requestid=20260801205005850073864004&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&itemId=27770747901&vendorItemId=95469538242&traceid=V0-153-20a1e33ba49b0458&clickBeacon=9052fbb0-8d9f-11f1-b47c-6fabded070ee%7E3&requestid=20260801205308566211618271&token=31850C%7CMIXED"
     }
   ],
   "cardFiles": [
@@ -47,83 +47,30 @@
     "07-cta.png"
   ],
   "cardPaths": [
-    "published/cards/2026-08-01T11-50-05-357Z/01-cover.png",
-    "published/cards/2026-08-01T11-50-05-357Z/02-product.png",
-    "published/cards/2026-08-01T11-50-05-357Z/03-product.png",
-    "published/cards/2026-08-01T11-50-05-357Z/04-product.png",
-    "published/cards/2026-08-01T11-50-05-357Z/05-product.png",
-    "published/cards/2026-08-01T11-50-05-357Z/06-product.png",
-    "published/cards/2026-08-01T11-50-05-357Z/07-cta.png"
+    "published/cards/2026-08-01T11-53-08-892Z/01-cover.png",
+    "published/cards/2026-08-01T11-53-08-892Z/02-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/03-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/04-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/05-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/06-product.png",
+    "published/cards/2026-08-01T11-53-08-892Z/07-cta.png"
   ],
-  "caption": "책상 위 IT 액세서리, 가격대별로 정리해봤습니다 🖥️\n손목 각도를 세워주는 유그린 버티컬 무선 마우스는 2만원대, 4단계 DPI 조절과 멀티페어링을 지원합니다.\n타건감을 찾는 분이라면 에이투 LED 기계식 풀배열 키보드(5만원대)가 선택지에 들어갑니다.\n포트 부족이 고민이라면 베이직기어 8in1 C타입 허브(10Gbps), 발열이 신경 쓰이면 홈플래닛 메탈 쿨링홀 거치대가 있습니다 ⌨️\n무선 이어폰은 맨큐 제품이 6만원대에 자리하고 있습니다.\n작업 환경에서 아쉬웠던 부분부터 하나씩 채워보면 좋겠네요 ✏️\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #버티컬마우스 #유그린 #기계식키보드 #USB허브 #노트북거치대 #무선이어폰 #데스크셋업 #책상정리 #작업환경 #가성비템 #쿠팡템 #직장인아이템 #제품정리",
+  "caption": "책상 위 IT 액세서리, 가격대별로 한 번 정리해봤습니다 🖥️\n\n1만원대 무선 마우스(PANWEST PW815)는 서브 장비로 하나쯤 두기 좋은 가격대예요.\n타건감 위주라면 에이투 LED 유선 기계식 풀키 키보드(59,900원)가 입문 라인에 들어갑니다.\n포트가 부족한 노트북엔 베이직기어 버티컬 8in1 C타입 허브(10Gbps), 발열·자세가 신경 쓰이면 홈플래닛 메탈 쿨링홀 거치대가 대안이 됩니다 💻\n무선 청음은 맨큐 블루투스 이어폰(69,800원)까지 함께 묶어 봤어요.\n필요한 항목만 골라 담는 쪽이 합리적입니다 ✨\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #무선마우스 #기계식키보드 #USB허브 #노트북거치대 #블루투스이어폰 #데스크테리어 #책상꾸미기 #가성비템 #자취템 #사무용품 #쿠팡추천템 #atoztem #생활아이템",
   "hashtags": [
     "#IT액세서리",
-    "#버티컬마우스",
-    "#유그린",
+    "#무선마우스",
     "#기계식키보드",
     "#USB허브",
     "#노트북거치대",
-    "#무선이어폰",
-    "#데스크셋업",
-    "#책상정리",
-    "#작업환경",
+    "#블루투스이어폰",
+    "#데스크테리어",
+    "#책상꾸미기",
     "#가성비템",
-    "#쿠팡템",
-    "#직장인아이템",
-    "#제품정리"
+    "#자취템",
+    "#사무용품",
+    "#쿠팡추천템",
+    "#atoztem",
+    "#생활아이템"
   ],
-  "deeplinks": [
-    {
-      "originalUrl": "https://www.coupang.com/vp/products/8636050907",
-      "shortenUrl": "https://link.coupang.com/a/fRs7EpcVsi",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8636050907&traceid=V0-183-f360528c5348fb44"
-    },
-    {
-      "originalUrl": "https://www.coupang.com/vp/products/6764000977",
-      "shortenUrl": "https://link.coupang.com/a/fRs7EunESi",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&traceid=V0-183-cb44dda131dada70"
-    },
-    {
-      "originalUrl": "https://www.coupang.com/vp/products/8437036767",
-      "shortenUrl": "https://link.coupang.com/a/fRs7EDgjjo",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&traceid=V0-183-418b673908b0c579"
-    },
-    {
-      "originalUrl": "https://www.coupang.com/vp/products/6577832726",
-      "shortenUrl": "https://link.coupang.com/a/fRs7EIbSUu",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&traceid=V0-183-db7e44d89bf59bbe"
-    },
-    {
-      "originalUrl": "https://www.coupang.com/vp/products/9359569491",
-      "shortenUrl": "https://link.coupang.com/a/fRs7EMLDfE",
-      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&traceid=V0-183-20a1e33ba49b0458"
-    }
-  ],
-  "links": [
-    {
-      "name": "UGREEN 유그린 4000DPI 인체공학 버티컬 블루투스 무선 무소음 마우스 |손목보호| 멀티페어링| 4단계 DPI 조절| 지능형 절전 모드|맥북 태블릿 노트북 컴퓨터 PC 호환",
-      "price": 22500,
-      "url": "https://link.coupang.com/a/fRs7EpcVsi"
-    },
-    {
-      "name": "에이투 게이밍 LED 유선 기계식 풀키 키보드",
-      "price": 59900,
-      "url": "https://link.coupang.com/a/fRs7EunESi"
-    },
-    {
-      "name": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브",
-      "price": 32300,
-      "url": "https://link.coupang.com/a/fRs7EDgjjo"
-    },
-    {
-      "name": "홈플래닛 메탈 쿨링홀 노트북 거치대",
-      "price": 16490,
-      "url": "https://link.coupang.com/a/fRs7EIbSUu"
-    },
-    {
-      "name": "맨큐 무선 블루투스 이어폰",
-      "price": 69800,
-      "url": "https://link.coupang.com/a/fRs7EMLDfE"
-    }
-  ]
+  "deeplinks": []
 }
