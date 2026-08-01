@@ -14,7 +14,7 @@ on:
       format:
         description: '게시 형식 (carousel / reel / both)'
         required: false
-        default: 'reel'
+        default: 'both'
 
 # 카드/로그를 저장소에 커밋하기 위한 쓰기 권한
 permissions:
@@ -66,7 +66,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/published/cards
-          POST_FORMAT: ${{ github.event.inputs.format || 'reel' }}
+          POST_FORMAT: ${{ github.event.inputs.format || 'both' }}
         run: npm run pipeline:publish
 
       # posted_log 갱신분 커밋
