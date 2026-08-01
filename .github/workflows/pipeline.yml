@@ -2,8 +2,8 @@ name: atoztem 자동 게시
 
 on:
   schedule:
-    # 매일 KST 오전 8시 (UTC 23시). 안정화 전까지 하루 1회.
-    - cron: '0 23 * * *'
+    # 매일 KST 오전 8시 17분경 (UTC 23:17). 정각(00분)은 부하로 누락 잦아 17분으로.
+    - cron: '17 23 * * *'
   workflow_dispatch:
     # 수동 트리거 (첫 게시 테스트용)
     inputs:
