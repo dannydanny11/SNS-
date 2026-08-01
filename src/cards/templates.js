@@ -68,7 +68,10 @@ export function buildProduct(theme, { index, total, product }) {
     ${product.copy ? `<div style="margin-top:22px; font-size:40px; font-weight:700; color:${t.accent}; line-height:1.3;">${escapeHtml(product.copy)}</div>` : ''}
     <div style="margin-top:16px; font-size:46px; font-weight:800; line-height:1.3;
                 display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${name}</div>
-    <div style="margin-top:auto; font-size:76px; font-weight:900; color:${t.priceColor};">${price}</div>
+    <div style="margin-top:auto;">
+      <div style="font-size:76px; font-weight:900; color:${t.priceColor}; line-height:1;">${price}</div>
+      <div style="margin-top:12px; font-size:30px; font-weight:700; color:${t.sub};">와우·쿠폰가는 링크에서 더 저렴 ↓</div>
+    </div>
   </div>`;
   return shell(t, inner, t.bg, t.fg);
 }

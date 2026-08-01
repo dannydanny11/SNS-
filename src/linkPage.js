@@ -26,6 +26,7 @@ function itemHtml(p) {
       ${copy}
       <div class="name">${esc(p.name)}</div>
       <div class="price">${won(p.price)}</div>
+      <div class="note">와우·쿠폰가는 링크에서 ↓</div>
     </div>
     <div class="go">구매 →</div>
   </a>`;
@@ -83,6 +84,7 @@ export function buildLinkPage(archive) {
   .name{font-size:14px;font-weight:700;line-height:1.3;
         display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .price{font-size:16px;font-weight:900;margin-top:3px}
+  .note{font-size:11px;font-weight:700;color:#c4b6a4;margin-top:2px}
   .go{flex:0 0 auto;background:#e07a5f;color:#fff;font-weight:800;font-size:13px;
       padding:9px 13px;border-radius:999px;white-space:nowrap}
   .disc{margin-top:28px;font-size:11.5px;color:#b6a794;line-height:1.6;text-align:center}
