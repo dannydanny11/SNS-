@@ -1,5 +1,5 @@
 {
-  "runId": "2026-08-01T11-53-08-892Z",
+  "runId": "2026-08-01T12-09-16-410Z",
   "category": {
     "id": "it",
     "name": "IT 액세서리",
@@ -7,70 +7,124 @@
   },
   "products": [
     {
-      "productId": 2352716938,
-      "productName": "PANWEST PANWEST-PW815 무선 마우스, PANWEST-PW815, 라이트블루",
-      "productPrice": 10500,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=2352716938&itemId=4081597101&vendorItemId=82815202941&traceid=V0-153-afc38779e2919526&clickBeacon=8fb31230-8d9f-11f1-af82-f9d767337211%7E3&requestid=20260801205307518073864053&token=31850C%7CMIXED"
+      "productId": 9075003138,
+      "productName": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스, 화이트, MVM1",
+      "productPrice": 13500,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9075003138&itemId=26655329807&vendorItemId=93627786802&traceid=V0-153-31c96b9edafa64ee&clickBeacon=d12d1600-8da1-11f1-acb0-489ad684ad77%7E3&requestid=20260801210916355224690240&token=31850C%7CMIXED"
     },
     {
       "productId": 6764000977,
       "productName": "에이투 게이밍 LED 유선 기계식 풀키 키보드, 블랙, AG0302, 적축",
       "productPrice": 59900,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=8fdf5250-8d9f-11f1-b7cb-3e2b5d1be577%7E3&requestid=20260801205307813206526103&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&itemId=15859702694&vendorItemId=83396841154&traceid=V0-153-cb44dda131dada70&clickBeacon=d1450ad0-8da1-11f1-82a2-72f20fb348da%7E3&requestid=20260801210916522107944470&token=31850C%7CMIXED"
     },
     {
       "productId": 8437036767,
       "productName": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브, 1개",
       "productPrice": 32300,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=9001a760-8d9f-11f1-b229-a4d9647268c8%7E3&requestid=20260801205308028262469047&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&itemId=24401794450&vendorItemId=91416608258&traceid=V0-153-418b673908b0c579&clickBeacon=d1500750-8da1-11f1-b17d-99c880f883b9%7E3&requestid=20260801210916590282472838&token=31850C%7CMIXED"
     },
     {
       "productId": 6577832726,
       "productName": "홈플래닛 메탈 쿨링홀 노트북 거치대",
       "productPrice": 16490,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801205308333024747764&token=31850C%7CMIXED"
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&itemId=15921396813&vendorItemId=83128703899&traceid=V0-153-db7e44d89bf59bbe&requestid=20260801210916709183564350&token=31850C%7CMIXED"
     },
     {
-      "productId": 9359569491,
-      "productName": "맨큐 무선 블루투스 이어폰, X08, 블랙",
-      "productPrice": 69800,
-      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9359569491&itemId=27770747901&vendorItemId=95469538242&traceid=V0-153-20a1e33ba49b0458&clickBeacon=9052fbb0-8d9f-11f1-b47c-6fabded070ee%7E3&requestid=20260801205308566211618271&token=31850C%7CMIXED"
+      "productId": 6577822503,
+      "productName": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰, BLP-BE331W, 화이트, 5시간, BLP-BE331W, 화이트",
+      "productPrice": 28800,
+      "productUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577822503&itemId=14790109733&vendorItemId=90822605251&traceid=V0-153-9ef69fee5310d3be&clickBeacon=d17f2da0-8da1-11f1-98da-25d01fbb465e%7E3&requestid=20260801210916897257836946&token=31850C%7CMIXED"
     }
   ],
   "cardFiles": [
-    "01-cover.png",
-    "02-product.png",
-    "03-product.png",
-    "04-product.png",
-    "05-product.png",
-    "06-product.png",
-    "07-cta.png"
+    "01-cover.jpg",
+    "02-product.jpg",
+    "03-product.jpg",
+    "04-product.jpg",
+    "05-product.jpg",
+    "06-product.jpg",
+    "07-cta.jpg"
   ],
   "cardPaths": [
-    "published/cards/2026-08-01T11-53-08-892Z/01-cover.png",
-    "published/cards/2026-08-01T11-53-08-892Z/02-product.png",
-    "published/cards/2026-08-01T11-53-08-892Z/03-product.png",
-    "published/cards/2026-08-01T11-53-08-892Z/04-product.png",
-    "published/cards/2026-08-01T11-53-08-892Z/05-product.png",
-    "published/cards/2026-08-01T11-53-08-892Z/06-product.png",
-    "published/cards/2026-08-01T11-53-08-892Z/07-cta.png"
+    "published/cards/2026-08-01T12-09-16-410Z/01-cover.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/02-product.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/03-product.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/04-product.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/05-product.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/06-product.jpg",
+    "published/cards/2026-08-01T12-09-16-410Z/07-cta.jpg"
   ],
-  "caption": "책상 위 IT 액세서리, 가격대별로 한 번 정리해봤습니다 🖥️\n\n1만원대 무선 마우스(PANWEST PW815)는 서브 장비로 하나쯤 두기 좋은 가격대예요.\n타건감 위주라면 에이투 LED 유선 기계식 풀키 키보드(59,900원)가 입문 라인에 들어갑니다.\n포트가 부족한 노트북엔 베이직기어 버티컬 8in1 C타입 허브(10Gbps), 발열·자세가 신경 쓰이면 홈플래닛 메탈 쿨링홀 거치대가 대안이 됩니다 💻\n무선 청음은 맨큐 블루투스 이어폰(69,800원)까지 함께 묶어 봤어요.\n필요한 항목만 골라 담는 쪽이 합리적입니다 ✨\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #무선마우스 #기계식키보드 #USB허브 #노트북거치대 #블루투스이어폰 #데스크테리어 #책상꾸미기 #가성비템 #자취템 #사무용품 #쿠팡추천템 #atoztem #생활아이템",
+  "caption": "책상 위 잔소리 없는 IT 액세서리 5종을 정리했습니다 🖥️\n무소음 마우스는 카페나 사무실처럼 소리 신경 쓰이는 공간에서 찾는 분들이 많고요, 기계식 키보드는 타건감을 중요하게 보는 분들에게 맞는 라인입니다.\nC타입 포트 하나로 버티는 노트북이라면 8in1 멀티허브가 확장 역할을 해주고, 메탈 거치대는 발열과 목 각도를 같이 잡는 용도예요.\nENC 이어폰은 통화·화상회의 비중이 높은 분들이 눈여겨보는 제품입니다 🎧\n가격대는 1만 원대부터 5만 원대까지, 필요한 것만 골라 채우기 좋은 구성입니다.\n제품 정보는 저장해두고 필요할 때 확인해보세요 📌\n\n👉 링크는 프로필에서 확인하세요\n\n이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.\n\n#IT액세서리 #무선마우스 #무소음마우스 #기계식키보드 #게이밍키보드 #USB허브 #멀티허브 #노트북거치대 #쿨링패드 #블루투스이어폰 #노이즈캔슬링 #데스크테리어 #책상템 #가성비템 #자기계발용품",
   "hashtags": [
     "#IT액세서리",
     "#무선마우스",
+    "#무소음마우스",
     "#기계식키보드",
+    "#게이밍키보드",
     "#USB허브",
+    "#멀티허브",
     "#노트북거치대",
+    "#쿨링패드",
     "#블루투스이어폰",
+    "#노이즈캔슬링",
     "#데스크테리어",
-    "#책상꾸미기",
+    "#책상템",
     "#가성비템",
-    "#자취템",
-    "#사무용품",
-    "#쿠팡추천템",
-    "#atoztem",
-    "#생활아이템"
+    "#자기계발용품"
   ],
-  "deeplinks": []
+  "deeplinks": [
+    {
+      "originalUrl": "https://www.coupang.com/vp/products/9075003138",
+      "shortenUrl": "https://link.coupang.com/a/fRuuEp0TKe",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=9075003138&traceid=V0-183-31c96b9edafa64ee"
+    },
+    {
+      "originalUrl": "https://www.coupang.com/vp/products/6764000977",
+      "shortenUrl": "https://link.coupang.com/a/fRuuEwaZcy",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6764000977&traceid=V0-183-cb44dda131dada70"
+    },
+    {
+      "originalUrl": "https://www.coupang.com/vp/products/8437036767",
+      "shortenUrl": "https://link.coupang.com/a/fRuuEBmQWP",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=8437036767&traceid=V0-183-418b673908b0c579"
+    },
+    {
+      "originalUrl": "https://www.coupang.com/vp/products/6577832726",
+      "shortenUrl": "https://link.coupang.com/a/fRuuEHKAsm",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577832726&traceid=V0-183-db7e44d89bf59bbe"
+    },
+    {
+      "originalUrl": "https://www.coupang.com/vp/products/6577822503",
+      "shortenUrl": "https://link.coupang.com/a/fRuuEMIN9o",
+      "landingUrl": "https://link.coupang.com/re/AFFSDP?lptag=AF7089092&pageKey=6577822503&traceid=V0-183-9ef69fee5310d3be"
+    }
+  ],
+  "links": [
+    {
+      "name": "아이리버 항균처리 듀얼모드 멀티페어링 경량 인비저블 블루투스 무소음 무선 마우스",
+      "price": 13500,
+      "url": "https://link.coupang.com/a/fRuuEp0TKe"
+    },
+    {
+      "name": "에이투 게이밍 LED 유선 기계식 풀키 키보드",
+      "price": 59900,
+      "url": "https://link.coupang.com/a/fRuuEwaZcy"
+    },
+    {
+      "name": "베이직기어 버티컬 8in1 C타입 10Gbps USB 멀티허브",
+      "price": 32300,
+      "url": "https://link.coupang.com/a/fRuuEBmQWP"
+    },
+    {
+      "name": "홈플래닛 메탈 쿨링홀 노트북 거치대",
+      "price": 16490,
+      "url": "https://link.coupang.com/a/fRuuEHKAsm"
+    },
+    {
+      "name": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰",
+      "price": 28800,
+      "url": "https://link.coupang.com/a/fRuuEMIN9o"
+    }
+  ]
 }
