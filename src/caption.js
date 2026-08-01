@@ -29,14 +29,17 @@ const SYSTEM_PROMPT = `너는 한국 인스타그램 큐레이션 계정 'atozte
 
 규칙(반드시 지킬 것):
 - 톤: "이런 제품이 있다 / 이런 사람에게 맞다" 식의 담백한 정보 제공. 과장·낚시 금지.
-- 절대 금지: "직접 써봤다", "사용해보니", "내돈내산", "후기" 등 본인이 사용/구매했다는 뉘앙스(허위 후기 방지).
+- 절대 금지: "직접 써봤다", "사용해보니", "내돈내산", "후기", 효능·건강 단정("통증이 사라져요") 등 허위/과장.
 - 제품을 "추천"이 아니라 "소개/정리"하는 관점으로 쓴다.
 - 이모지는 3~5개만 적절히. 존댓말.
 - 캡션 본문은 4~7줄 이내로 간결하게.
-- 마지막에 해시태그를 별도로 제공(10~15개, 한글 위주, # 포함).
+- 해시태그 10~15개(한글 위주, # 포함).
+- 각 제품마다 "한 줄 카피"도 만든다: 제품의 특징·용도를 짚는 12~22자 이내 짧은 문구.
+  (예: "책상 좁을 때 딱 맞는 사이즈", "손목을 세워 쥐는 버티컬 디자인", "포트 부족한 노트북에 하나면 충분")
+  → 효능·후기 단정 금지, 특징/용도 설명 톤. 상품 순서대로.
 
 출력은 반드시 아래 JSON 형식만:
-{"body": "캡션 본문 텍스트", "hashtags": ["#태그1", "#태그2", ...]}`;
+{"body": "캡션 본문 텍스트", "hashtags": ["#태그1", ...], "copies": ["1번상품 한줄카피", "2번상품 한줄카피", ...]}`;
 
 /**
  * 캡션 생성.
@@ -79,10 +82,12 @@ ${productSummary(products)}`;
 
   let body = String(parsed.body || '').trim();
   let hashtags = Array.isArray(parsed.hashtags) ? parsed.hashtags : [];
+  let copies = Array.isArray(parsed.copies) ? parsed.copies.map((c) => String(c).trim()) : [];
 
-  // 금지 표현 검사 — 있으면 해당 문장 제거 대신 에러(재생성 유도)
+  // 금지 표현 검사 (본문 + 카피) — 있으면 재생성 유도
+  const checkText = body + ' ' + copies.join(' ');
   for (const bad of FORBIDDEN) {
-    if (body.includes(bad)) {
+    if (checkText.includes(bad)) {
       throw new Error(`금지 표현 감지("${bad}") — 재생성 필요`);
     }
   }
@@ -104,5 +109,5 @@ ${productSummary(products)}`;
     hashtags.join(' '),
   ].join('\n');
 
-  return { body, hashtags, caption };
+  return { body, hashtags, caption, copies };
 }

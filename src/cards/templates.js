@@ -65,7 +65,8 @@ export function buildProduct(theme, { index, total, product }) {
       <img src="${escapeHtml(product.productImage)}" style="max-width:88%; max-height:88%; object-fit:contain;">
     </div>
     <div style="margin-top:48px; display:flex; gap:16px; align-items:center;">${rocket}</div>
-    <div style="margin-top:24px; font-size:52px; font-weight:800; line-height:1.3;
+    ${product.copy ? `<div style="margin-top:22px; font-size:40px; font-weight:700; color:${t.accent}; line-height:1.3;">${escapeHtml(product.copy)}</div>` : ''}
+    <div style="margin-top:16px; font-size:46px; font-weight:800; line-height:1.3;
                 display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${name}</div>
     <div style="margin-top:auto; font-size:76px; font-weight:900; color:${t.priceColor};">${price}</div>
   </div>`;

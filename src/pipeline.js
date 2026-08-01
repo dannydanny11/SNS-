@@ -7,6 +7,7 @@ import { generateCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
 import { publishCarousel } from './instagram.js';
 import { buildLinkPage } from './linkPage.js';
+import { addEntry } from './archive.js';
 import { appendPosted } from './postedLog.js';
 import { requireEnv } from './config.js';
 import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
@@ -27,7 +28,15 @@ export async function generate() {
     throw new Error(`선정 상품 부족(${products.length}개) — 이번 회차 건너뜀`);
   }
 
-  // 제휴 딥링크 — 일반 상품페이지 URL 로 요청해 짧은 제휴 링크(link.coupang.com/a/..) 확보
+  // ④ 캡션 + 제품별 한 줄 카피 먼저 생성 (카드에 카피를 넣어야 하므로 렌더보다 앞)
+  const { caption, hashtags, copies } = await generateCaption(post);
+  const v = validateCaption(caption);
+  if (!v.ok) throw new Error(`캡션 검증 실패: ${v.reason}`);
+  products.forEach((p, i) => {
+    p.copy = copies[i] || '';
+  });
+
+  // ② 제휴 딥링크 — 일반 상품페이지 URL 로 요청해 짧은 제휴 링크(link.coupang.com/a/..) 확보
   let deeplinks = [];
   try {
     const rawUrls = products.map(
@@ -38,21 +47,20 @@ export async function generate() {
     /* 실패해도 productUrl(제휴태그 포함)로 대체 */
   }
 
-  // 상품별 제휴 링크 목록 (프로필 링크 페이지용) — 짧은 링크 우선, 없으면 productUrl
+  // 상품별 링크 항목 (링크페이지·아카이브·통지 공용)
   const links = products.map((p, i) => ({
     name: p.productName.split(',')[0].trim(),
     price: p.productPrice,
+    image: p.productImage,
+    copy: p.copy,
     url: deeplinks[i]?.shortenUrl || p.productUrl,
   }));
 
+  // ③ 카드 렌더 (카피 포함)
   const runId = new Date().toISOString().replace(/[:.]/g, '-');
   mkdirSync(PUB_DIR, { recursive: true });
   const outDir = `${PUB_DIR}/cards/${runId}`;
   const cardPaths = await buildPostCards(post, outDir);
-
-  const { caption, hashtags } = await generateCaption(post);
-  const v = validateCaption(caption);
-  if (!v.ok) throw new Error(`캡션 검증 실패: ${v.reason}`);
 
   const manifest = {
     runId,
@@ -63,6 +71,7 @@ export async function generate() {
       productPrice: p.productPrice,
       productUrl: p.productUrl,
       productImage: p.productImage,
+      copy: p.copy,
     })),
     cardFiles: cardPaths.map((p) => basename(p)),
     cardPaths,
@@ -73,7 +82,7 @@ export async function generate() {
   };
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2));
 
-  // 프로필 링크 페이지용 링크 목록 (복사·붙여넣기용)
+  // 프로필 링크 목록 (복사용 md)
   const linksMd =
     `# ${category.name} — 오늘의 제휴 링크\n\n` +
     links
@@ -82,8 +91,10 @@ export async function generate() {
     '\n';
   writeFileSync(`${PUB_DIR}/latest-links.md`, linksMd);
 
-  // 프로필 링크 페이지(GitHub Pages) 갱신 — docs/index.html
-  buildLinkPage({ category, products, links });
+  // 아카이브 갱신(과거 상품도 구매 가능) + 링크 페이지(docs/index.html) 재생성
+  const date = runId.slice(0, 10); // YYYY-MM-DD
+  const archive = addEntry({ date, category: category.name, products: links });
+  buildLinkPage(archive);
 
   return manifest;
 }
