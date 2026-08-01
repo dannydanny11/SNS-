@@ -116,6 +116,23 @@ export function readManifest() {
   return JSON.parse(readFileSync(MANIFEST, 'utf8'));
 }
 
+/** 공개 URL 이 실제로 접근 가능(200, 이미지/영상)해질 때까지 대기 (CDN 전파) */
+async function waitForUrl(url, { tries = 30, intervalMs = 6000 } = {}) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const r = await fetch(url, { method: 'GET' });
+      const ct = r.headers.get('content-type') || '';
+      if (r.status === 200 && (ct.includes('image') || ct.includes('video') || ct.includes('octet-stream'))) {
+        return;
+      }
+    } catch {
+      /* 네트워크 일시 오류 무시 */
+    }
+    await new Promise((res) => setTimeout(res, intervalMs));
+  }
+  throw new Error(`미디어 URL 접근 대기 초과: ${url}`);
+}
+
 /**
  * ⑤~⑥ : 매니페스트의 카드를 공개 URL 로 게시하고 로그 기록.
  * @param {object} manifest
@@ -133,12 +150,14 @@ export async function publish(manifest) {
     const imageUrls = manifest.cardFiles.map(
       (f) => `${imageBase}/${manifest.runId}/${f}`
     );
+    await waitForUrl(imageUrls[0]); // CDN 전파 대기
     const r = await publishCarousel({ imageUrls, caption: manifest.caption });
     out.carousel = { postId: r.id, permalink: r.permalink };
   }
 
   if (format === 'reel' || format === 'both') {
     const videoUrl = `${pubBase}/reels/${manifest.reelFile}`;
+    await waitForUrl(videoUrl); // CDN 전파 대기
     const r = await publishReel({ videoUrl, caption: manifest.caption });
     out.reel = { postId: r.id, permalink: r.permalink };
   }
