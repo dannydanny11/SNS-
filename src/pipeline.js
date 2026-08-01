@@ -39,12 +39,23 @@ export async function generate() {
     p.copy = copies[i] || '';
   });
 
-  // ② 제휴 딥링크 — 일반 상품페이지 URL 로 요청해 짧은 제휴 링크(link.coupang.com/a/..) 확보
+  // ② 제휴 딥링크 — 카드에 보이는 "정확한 옵션(itemId/vendorItemId)"까지 링크에 담아야
+  //    링크 눌렀을 때 같은 이미지/옵션이 나온다. productUrl 에서 옵션 파라미터를 추출해 사용.
   let deeplinks = [];
   try {
-    const rawUrls = products.map(
-      (p) => `https://www.coupang.com/vp/products/${p.productId}`
-    );
+    const rawUrls = products.map((p) => {
+      try {
+        const u = new URL(p.productUrl);
+        const pk = u.searchParams.get('pageKey') || p.productId;
+        const it = u.searchParams.get('itemId');
+        const vi = u.searchParams.get('vendorItemId');
+        return it && vi
+          ? `https://www.coupang.com/vp/products/${pk}?itemId=${it}&vendorItemId=${vi}`
+          : `https://www.coupang.com/vp/products/${pk}`;
+      } catch {
+        return `https://www.coupang.com/vp/products/${p.productId}`;
+      }
+    });
     deeplinks = await createDeeplinks(rawUrls);
   } catch {
     /* 실패해도 productUrl(제휴태그 포함)로 대체 */
