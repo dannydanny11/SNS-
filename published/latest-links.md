@@ -1,12 +1,12 @@
-# 생활 갓성비템 — 오늘의 제휴 링크
+# IT 액세서리 — 오늘의 제휴 링크
 
-- 마켓플러스 미드센추리 철제 수납함 주방 식탁 양념통 영양제 정리함 (62,000원)
-  https://link.coupang.com/a/fRCFvfKbg4
-- 루바노 스텐304 욕실 청소도구걸이 PRO (11,000원)
-  https://link.coupang.com/a/fRCFvjTLP2
-- 채움재 4세대 맥세이프 차량용 핸드폰 거치대 (20,000원)
-  https://link.coupang.com/a/fRCFvrcfOC
-- 온딜레 1.2리터 대용량 스텐 텀블러 + 빨대 포함 이중 진공 보온 보냉 차량용 캠핑용 (29,900원)
-  https://link.coupang.com/a/fRCFvzkvfw
-- 포도스 고급 린넨 수납정리함 접이식 리빙박스 (34,390원)
-  https://link.coupang.com/a/fRCFvDUfAG
+- PANWEST PANWEST-PW815 무선 마우스 (10,500원)
+  https://link.coupang.com/a/fSg1aUV53I
+- 앱코 축교환 레인보우 무빙 LED 기계식 유선 일반형 키보드 (30,900원)
+  https://link.coupang.com/a/fSg1a2OUCG
+- ACMEZING 5포트 C타입 멀티허브 USB 3.0 초고속 4K HDMI PD100W 5in1 멀티포트 HC-5 (41,000원)
+  https://link.coupang.com/a/fSg1a7H2UC
+- 퍼플래빗 3in1 노트북 거치대 높이 각도 조절 독서대 (32,900원)
+  https://link.coupang.com/a/fSg1bc0i2S
+- KONLI 노이즈 캔슬링 커널형 무선 블루투스 이어폰  방수 (15,900원)
+  https://link.coupang.com/a/fSg1bhz3n2
