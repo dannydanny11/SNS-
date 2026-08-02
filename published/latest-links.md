@@ -1,12 +1,12 @@
-# IT 액세서리 — 오늘의 제휴 링크
+# 생활 갓성비템 — 오늘의 제휴 링크
 
-- PANWEST PANWEST-PW815 무선 마우스 (10,500원)
-  https://link.coupang.com/a/fSg1aUV53I
-- 앱코 축교환 레인보우 무빙 LED 기계식 유선 일반형 키보드 (30,900원)
-  https://link.coupang.com/a/fSg1a2OUCG
-- ACMEZING 5포트 C타입 멀티허브 USB 3.0 초고속 4K HDMI PD100W 5in1 멀티포트 HC-5 (41,000원)
-  https://link.coupang.com/a/fSg1a7H2UC
-- 퍼플래빗 3in1 노트북 거치대 높이 각도 조절 독서대 (32,900원)
-  https://link.coupang.com/a/fSg1bc0i2S
-- KONLI 노이즈 캔슬링 커널형 무선 블루투스 이어폰  방수 (15,900원)
-  https://link.coupang.com/a/fSg1bhz3n2
+- PAPEPIE 미니멀 철제 수납함 오피스 주방용품 화장품 정리함 (29,800원)
+  https://link.coupang.com/a/fTWl2bUhEa
+- 루이자몰 무타공 욕실선반 다용도 거치대 (24,000원)
+  https://link.coupang.com/a/fTWl2hyyK4
+- Toocki z폴드 플립 대화면 호환 무선충전 차량용 핸드폰거치대 (44,700원)
+  https://link.coupang.com/a/fTWl2mkfE4
+- 무광 대용량 스테인리스 텀블러 빨대 세트 보온 보냉 스텐 진공 (11,900원)
+  https://link.coupang.com/a/fTWl2qnPhs
+- Kipnos 폴딩 대용량 리빙박스 수납장 대용량 수납 정리함 접이식 보관함 다용도 수납함 플라스틱 수납함 사물함 정리함 리빙박 스수납박스 대형가정용 장난감 수납장 옷정리함 (80,000원)
+  https://link.coupang.com/a/fTWl2vwIGy
