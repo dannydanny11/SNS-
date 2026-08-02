@@ -124,7 +124,7 @@ export async function generate() {
 
   // 아카이브 갱신(과거 상품도 구매 가능) + 링크 페이지(docs/index.html) 재생성
   const date = runId.slice(0, 10); // YYYY-MM-DD
-  const archive = addEntry({ date, category: category.name, products: links });
+  const archive = addEntry({ runId, date, category: category.name, products: links });
   buildLinkPage(archive);
 
   return manifest;
