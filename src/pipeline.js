@@ -31,8 +31,8 @@ export async function generate() {
     throw new Error(`선정 상품 부족(${products.length}개) — 이번 회차 건너뜀`);
   }
 
-  // ④ 캡션 + 제품별 한 줄 카피 먼저 생성 (카드에 카피를 넣어야 하므로 렌더보다 앞)
-  const { caption, hashtags, copies } = await generateCaption(post);
+  // ④ 캡션 + 제품별 한 줄 카피 + 표지 훅 먼저 생성 (카드에 넣어야 하므로 렌더보다 앞)
+  const { caption, hashtags, copies, headline } = await generateCaption(post);
   const v = validateCaption(caption);
   if (!v.ok) throw new Error(`캡션 검증 실패: ${v.reason}`);
   products.forEach((p, i) => {
@@ -74,7 +74,7 @@ export async function generate() {
   const runId = new Date().toISOString().replace(/[:.]/g, '-');
   mkdirSync(PUB_DIR, { recursive: true });
   const outDir = `${PUB_DIR}/cards/${runId}`;
-  const cardPaths = await buildPostCards(post, outDir);
+  const cardPaths = await buildPostCards(post, outDir, { headline });
 
   // 릴스 영상 생성 (카드 → 9:16 mp4). 내레이션(카드별 대사) + 배경음.
   const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;

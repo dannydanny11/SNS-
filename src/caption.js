@@ -28,6 +28,9 @@ const SYSTEM_PROMPT = `너는 한국 인스타그램 큐레이션 계정 'atozte
 쿠팡에서 찾은 가성비 제품을 '정보형 큐레이션' 톤으로 소개한다.
 
 규칙(반드시 지킬 것):
+- 표지 훅 문구(headline): 그날 상품들을 아우르는 **긍정적이고 설레는** 한 마디. **매번 다르게, 흥미롭게.** 8~14자, 필요하면 \\n 으로 2줄.
+  · 부정어("없으면", "불편한", "힘든", "지친") 금지 → 긍정·기대·발견 톤.
+  · 예: "책상이 즐거워지는 템", "오늘의 갓성비 발견", "삶의 질 올려주는 5", "이건 사길 잘했다", "매일 손이 가는 템".
 - 톤: "이런 제품이 있다 / 이런 사람에게 맞다" 식의 담백한 정보 제공. 과장·낚시 금지.
 - 절대 금지: "직접 써봤다", "사용해보니", "내돈내산", "후기", 효능·건강 단정("통증이 사라져요") 등 허위/과장.
 - 제품을 "추천"이 아니라 "소개/정리"하는 관점으로 쓴다.
@@ -41,7 +44,7 @@ const SYSTEM_PROMPT = `너는 한국 인스타그램 큐레이션 계정 'atozte
   → 효능·건강 단정·허위후기는 금지("통증이 사라져요" X). 상황·니즈 공감은 OK.
 
 출력은 반드시 아래 JSON 형식만:
-{"body": "캡션 본문 텍스트", "hashtags": ["#태그1", ...], "copies": ["1번상품 한줄카피", "2번상품 한줄카피", ...]}`;
+{"headline": "표지 훅(긍정·흥미, \\n로 2줄 가능)", "body": "캡션 본문", "hashtags": ["#태그1", ...], "copies": ["1번상품 한줄카피", ...]}`;
 
 /**
  * 캡션 생성.
@@ -85,6 +88,7 @@ ${productSummary(products)}`;
   let body = String(parsed.body || '').trim();
   let hashtags = Array.isArray(parsed.hashtags) ? parsed.hashtags : [];
   let copies = Array.isArray(parsed.copies) ? parsed.copies.map((c) => String(c).trim()) : [];
+  let headline = String(parsed.headline || '').trim();
 
   // 금지 표현 검사 (본문 + 카피) — 있으면 재생성 유도
   const checkText = body + ' ' + copies.join(' ');
@@ -111,5 +115,5 @@ ${productSummary(products)}`;
     hashtags.join(' '),
   ].join('\n');
 
-  return { body, hashtags, caption, copies };
+  return { body, hashtags, caption, copies, headline };
 }

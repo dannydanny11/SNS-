@@ -13,17 +13,18 @@ export const CONFIRMED_THEME = 'C';
  * @param {string} outDir  카드 PNG 저장 폴더
  * @returns {Promise<string[]>} 순서대로 정렬된 카드 파일 경로 배열
  */
-export async function buildPostCards(post, outDir) {
+export async function buildPostCards(post, outDir, opts = {}) {
   const theme = THEMES[CONFIRMED_THEME];
   const { category, products } = post;
   const total = products.length;
+  const headline = opts.headline || category.headline || category.name;
 
   mkdirSync(outDir, { recursive: true });
   const files = [];
 
   // 1) 표지
   const coverHtml = buildCover(theme, {
-    headline: category.headline || category.name,
+    headline,
     category: category.name,
     total,
     products,
