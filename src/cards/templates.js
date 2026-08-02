@@ -72,13 +72,13 @@ export function buildProduct(theme, { index, total, product }) {
   const inner = `
   <div class="card" style="padding:80px 84px;">
     <div class="brand" style="top:64px; right:84px; color:${t.sub}; font-size:30px;">${index} / ${total}</div>
-    <div style="width:100%; height:560px; background:${t.card}; border-radius:40px;
+    <div style="width:100%; height:460px; background:${t.card}; border-radius:40px;
                 display:flex; align-items:center; justify-content:center; overflow:hidden;">
       <img src="${escapeHtml(product.productImage)}" style="max-width:88%; max-height:88%; object-fit:contain;">
     </div>
-    <div style="margin-top:48px; display:flex; gap:16px; align-items:center;">${rocket}</div>
+    <div style="margin-top:40px; display:flex; gap:16px; align-items:center;">${rocket}</div>
     ${product.copy ? `<div style="margin-top:22px; font-size:40px; font-weight:700; color:${t.accent}; line-height:1.3;">${escapeHtml(product.copy)}</div>` : ''}
-    <div style="margin-top:16px; font-size:46px; font-weight:800; line-height:1.3;
+    <div style="margin-top:14px; font-size:42px; font-weight:800; line-height:1.3;
                 display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${name}</div>
     <div style="margin-top:auto;">
       <div style="font-size:76px; font-weight:900; color:${t.priceColor}; line-height:1;">${price}</div>
