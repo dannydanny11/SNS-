@@ -2,7 +2,8 @@
 // 확정 시안: C (소프트 크림).  표지 1 + 제품 N + CTA 1.
 import { THEMES } from './theme.js';
 import { buildCover, buildProduct, buildCta } from './templates.js';
-import { renderCard } from './render.js';
+import { buildReelCover, buildReelProduct, buildReelCta } from './reelTemplates.js';
+import { renderCard, renderReel } from './render.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
 export const CONFIRMED_THEME = 'C';
@@ -49,6 +50,37 @@ export async function buildPostCards(post, outDir, opts = {}) {
   const ctaHtml = buildCta(theme, { category: category.name });
   const ctaPath = `${outDir}/${String(products.length + 2).padStart(2, '0')}-cta.jpg`;
   writeFileSync(ctaPath, await renderCard(ctaHtml));
+  files.push(ctaPath);
+
+  return files;
+}
+
+/**
+ * 릴스용 9:16(1080×1920) 카드 세트 렌더링 → 파일 저장.
+ * @returns {Promise<string[]>} 순서대로 정렬된 세로 카드 경로
+ */
+export async function buildReelCards(post, outDir, opts = {}) {
+  const theme = THEMES[CONFIRMED_THEME];
+  const { category, products } = post;
+  const total = products.length;
+  const headline = opts.headline || category.headline || category.name;
+  mkdirSync(outDir, { recursive: true });
+  const files = [];
+
+  const cover = buildReelCover(theme, { headline, category: category.name, total, products });
+  const coverPath = `${outDir}/01-cover.jpg`;
+  writeFileSync(coverPath, await renderReel(cover));
+  files.push(coverPath);
+
+  for (let i = 0; i < products.length; i++) {
+    const html = buildReelProduct(theme, { index: i + 1, total, product: products[i] });
+    const p = `${outDir}/${String(i + 2).padStart(2, '0')}-product.jpg`;
+    writeFileSync(p, await renderReel(html));
+    files.push(p);
+  }
+
+  const ctaPath = `${outDir}/${String(products.length + 2).padStart(2, '0')}-cta.jpg`;
+  writeFileSync(ctaPath, await renderReel(buildReelCta(theme)));
   files.push(ctaPath);
 
   return files;

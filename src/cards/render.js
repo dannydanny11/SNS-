@@ -57,6 +57,35 @@ export async function renderCard(html) {
   }
 }
 
+/** HTML → 1080×1920 세로(릴스용) JPEG 버퍼 */
+export async function renderReel(html) {
+  const browser = await getBrowser();
+  const page = await browser.newPage();
+  try {
+    await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 1 });
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
+    await page.evaluate(async () => {
+      const imgs = Array.from(document.images);
+      await Promise.all(
+        imgs.map((img) =>
+          img.complete
+            ? Promise.resolve()
+            : new Promise((res) => {
+                img.onload = img.onerror = res;
+              })
+        )
+      );
+    });
+    return await page.screenshot({
+      type: 'jpeg',
+      quality: 92,
+      clip: { x: 0, y: 0, width: 1080, height: 1920 },
+    });
+  } finally {
+    await page.close();
+  }
+}
+
 /** HTML 여러 장을 파일로 저장 */
 export async function renderToFiles(items, outDir) {
   mkdirSync(outDir, { recursive: true });

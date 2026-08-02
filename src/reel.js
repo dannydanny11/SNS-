@@ -88,10 +88,10 @@ export async function buildReel(cardPaths, opts = {}) {
   const clips = [];
   for (let i = 0; i < cardPaths.length; i++) {
     const clip = join(tmp, `c${i}.mp4`);
+    // 입력이 이미 9:16(1080×1920) 릴스 카드 → 그대로 채움(여백 없음)
     const vf =
-      `scale=1080:1080:force_original_aspect_ratio=decrease,` +
-      `pad=1080:1080:(ow-iw)/2:(oh-ih)/2:color=${BG},` +
-      `pad=1080:1920:0:420:color=${BG},setsar=1,format=yuv420p`;
+      `scale=1080:1920:force_original_aspect_ratio=decrease,` +
+      `pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=${BG},setsar=1,format=yuv420p`;
     await ff([
       '-loop', '1', '-i', resolve(cardPaths[i]),
       '-t', durations[i].toFixed(2), '-r', String(FPS),

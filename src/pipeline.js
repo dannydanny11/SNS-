@@ -2,7 +2,7 @@
 // 게시는 카드 이미지를 먼저 공개 URL 로 올린 뒤 진행해야 하므로 2단계로 나눈다.
 import { selectProducts } from './selectProducts.js';
 import { createDeeplinks } from './coupang/deeplink.js';
-import { buildPostCards } from './cards/build.js';
+import { buildPostCards, buildReelCards } from './cards/build.js';
 import { generateCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
 import { publishCarousel } from './instagram.js';
@@ -76,8 +76,11 @@ export async function generate() {
   const outDir = `${PUB_DIR}/cards/${runId}`;
   const cardPaths = await buildPostCards(post, outDir, { headline });
 
-  // 릴스 영상 생성 (카드 → 9:16 mp4). 내레이션(카드별 대사) + 배경음.
+  // 릴스 영상 생성 — 세로 전용 9:16 카드 렌더 → mp4. 내레이션 + 배경음.
   const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
+  const reelCardPaths = await buildReelCards(post, `${PUB_DIR}/reels/${runId}/cards`, {
+    headline,
+  });
   const bgmPath = 'assets/reel-bgm.mp3';
   const narration = [
     `오늘은 ${category.name}, ${products.length}가지 골라봤어요`,
@@ -86,7 +89,7 @@ export async function generate() {
     ),
     `마음에 들면 프로필 링크에서 확인하세요`,
   ];
-  await buildReel(cardPaths, {
+  await buildReel(reelCardPaths, {
     outPath: reelPath,
     bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
     narration,
