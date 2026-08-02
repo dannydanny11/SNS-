@@ -22,6 +22,14 @@ export function writeLog(entries) {
   writeFileSync(LOG_PATH, JSON.stringify(entries, null, 2) + '\n', 'utf8');
 }
 
+/** 최근 N시간 내에 게시한 적 있는지 (중복 게시 방지 가드) */
+export function postedRecently(hours = 20, now = Date.now()) {
+  const log = readLog();
+  if (!log.length) return false;
+  const latest = Math.max(...log.map((e) => new Date(e.postedAt).getTime()));
+  return now - latest < hours * 60 * 60 * 1000;
+}
+
 /** 최근 N일 내에 게시된 상품 ID Set */
 export function recentProductIds(days = 30, now = Date.now()) {
   const cutoff = now - days * DAY_MS;

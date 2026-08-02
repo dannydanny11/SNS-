@@ -2,8 +2,10 @@ name: atoztem 자동 게시
 
 on:
   schedule:
-    # 매일 KST 오전 8시 17분경 (UTC 23:17). 정각(00분)은 부하로 누락 잦아 17분으로.
-    - cron: '17 23 * * *'
+    # GitHub 예약은 누락이 잦아 오전에 여러 번 시도(가드가 중복 게시 방지).
+    - cron: '17 23 * * *' # KST 08:17
+    - cron: '17 1 * * *'  # KST 10:17
+    - cron: '17 4 * * *'  # KST 13:17
   workflow_dispatch:
     # 수동 트리거 (첫 게시 테스트용)
     inputs:
@@ -46,6 +48,7 @@ jobs:
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
         run: npm run pipeline:generate
 
       # 생성된 카드/매니페스트를 커밋 → raw URL 로 공개
@@ -67,6 +70,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/published/cards
           POST_FORMAT: ${{ github.event.inputs.format || 'both' }}
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
         run: npm run pipeline:publish
 
       # posted_log 갱신분 커밋
