@@ -1,12 +1,12 @@
 // GitHub Actions 2단계: 매니페스트의 카드를 공개 URL 로 게시.
 import { publish, readManifest } from '../src/pipeline.js';
 import { notify } from '../src/notify.js';
-import { postedRecently } from '../src/postedLog.js';
+import { postedTodayKST } from '../src/postedLog.js';
 
 async function main() {
   // 오늘 이미 게시했으면 건너뜀 (생성 단계가 건너뛴 경우 stale 매니페스트 재게시 방지)
-  if (process.env.FORCE !== '1' && postedRecently()) {
-    console.log('최근 20시간 내 게시 있음 → 게시 건너뜀');
+  if (process.env.FORCE !== '1' && postedTodayKST()) {
+    console.log('오늘 이미 게시함 → 게시 건너뜀');
     return;
   }
   const manifest = readManifest();

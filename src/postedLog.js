@@ -22,12 +22,11 @@ export function writeLog(entries) {
   writeFileSync(LOG_PATH, JSON.stringify(entries, null, 2) + '\n', 'utf8');
 }
 
-/** 최근 N시간 내에 게시한 적 있는지 (중복 게시 방지 가드) */
-export function postedRecently(hours = 20, now = Date.now()) {
-  const log = readLog();
-  if (!log.length) return false;
-  const latest = Math.max(...log.map((e) => new Date(e.postedAt).getTime()));
-  return now - latest < hours * 60 * 60 * 1000;
+/** 오늘(KST 날짜) 이미 게시했는지 — 하루 1회 보장(중복 방지). */
+export function postedTodayKST(now = Date.now()) {
+  const kstDay = (t) => new Date(t + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const today = kstDay(now);
+  return readLog().some((e) => kstDay(new Date(e.postedAt).getTime()) === today);
 }
 
 /** 최근 N일 내에 게시된 상품 ID Set */
