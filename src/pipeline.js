@@ -32,7 +32,7 @@ export async function generate() {
   }
 
   // ④ 캡션 + 제품별 한 줄 카피 + 표지 훅 먼저 생성 (카드에 넣어야 하므로 렌더보다 앞)
-  const { caption, hashtags, copies, headline } = await generateCaption(post);
+  const { caption, hashtags, copies, headline, reelHook } = await generateCaption(post);
   const v = validateCaption(caption);
   if (!v.ok) throw new Error(`캡션 검증 실패: ${v.reason}`);
   products.forEach((p, i) => {
@@ -80,14 +80,15 @@ export async function generate() {
   const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
   const REEL_PRODUCTS = 3; // 릴스는 3개만(티저) → 15초 이내·완주율↑. 전체는 캐러셀에.
   const reelShown = products.slice(0, REEL_PRODUCTS);
+  const hook = reelHook || headline; // 릴스 첫 프레임/첫 대사 = 강한 훅
   const reelCardPaths = await buildReelCards(post, `${PUB_DIR}/reels/${runId}/cards`, {
-    headline,
+    headline: hook,
     maxProducts: REEL_PRODUCTS,
   });
   const bgmPath = 'assets/reel-bgm.mp3';
-  // 훅 최적화 내레이션: 첫 1초에 훅(표지 문구)부터, 제품은 짧게(가격 낭독 X → 템포↑)
+  // 훅 최적화 내레이션: 첫 1초에 훅부터, 제품은 짧게(가격 낭독 X → 템포↑)
   const narration = [
-    headline.replace(/\s*\n\s*/g, ' '),
+    hook.replace(/\s*\n\s*/g, ' '),
     ...reelShown.map((p) => p.copy || ''),
     `링크는 프로필에서`,
   ];
