@@ -1,194 +1,265 @@
-// 파이프라인 코어 — generate(카드+캡션 생성) 와 publish(게시) 를 분리.
-// 게시는 카드 이미지를 먼저 공개 URL 로 올린 뒤 진행해야 하므로 2단계로 나눈다.
-import { selectProducts } from './selectProducts.js';
+// 파이프라인 코어 (주간 풀 구조).
+//   월: 상품 10개 풀 확정 → 평일 오전/저녁 단품 릴스 10슬롯 → 금 밤 캐러셀 5개.
+//   게시는 카드/영상을 먼저 공개 URL(raw)로 올린 뒤 진행하므로 generate/publish 2단계.
+import { selectWeeklyPool } from './selectProducts.js';
 import { createDeeplinks } from './coupang/deeplink.js';
-import { buildPostCards, buildReelCards } from './cards/build.js';
-import { generateCaption } from './caption.js';
+import { buildPostCards, buildSingleReelCards } from './cards/build.js';
+import { generateCaption, generatePoolContent, buildReelCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
-import { publishCarousel } from './instagram.js';
+import { publishCarousel, publishReel } from './instagram.js';
 import { buildLinkPage } from './linkPage.js';
 import { buildReel } from './reel.js';
-import { publishReel } from './instagram.js';
 import { addEntry } from './archive.js';
-import { existsSync } from 'node:fs';
 import { appendPosted } from './postedLog.js';
 import { requireEnv } from './config.js';
-import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import { basename } from 'node:path';
+import {
+  readPool, savePool, isCurrentWeek, weekKeyOf, buildSchedule, skipPastSlots,
+  dueReelSlots, carouselDue, pickCarousel, markReelPosted, markCarouselPosted,
+} from './weekPool.js';
 
-// published/ 는 gitignore 되지 않음 — Actions 가 카드를 커밋해 공개 URL 로 게시한다.
 const PUB_DIR = 'published';
-const MANIFEST = `${PUB_DIR}/latest-manifest.json`;
+const QUEUE = `${PUB_DIR}/queue.json`;
 
-/**
- * ①~④ : 상품 선정 → 딥링크 → 카드 렌더 → 캡션 생성/검증.
- * 결과를 out/latest-manifest.json 에 기록하고 반환.
- */
-export async function generate() {
-  const post = await selectProducts();
-  const { category, products } = post;
-  if (products.length < 3) {
-    throw new Error(`선정 상품 부족(${products.length}개) — 이번 회차 건너뜀`);
-  }
-
-  // ④ 캡션 + 제품별 한 줄 카피 + 표지 훅 먼저 생성 (카드에 넣어야 하므로 렌더보다 앞)
-  const { caption, hashtags, copies, headline, reelHook } = await generateCaption(post);
-  const v = validateCaption(caption);
-  if (!v.ok) throw new Error(`캡션 검증 실패: ${v.reason}`);
-  products.forEach((p, i) => {
-    p.copy = copies[i] || '';
-  });
-
-  // ② 제휴 딥링크 — 카드에 보이는 "정확한 옵션(itemId/vendorItemId)"까지 링크에 담아야
-  //    링크 눌렀을 때 같은 이미지/옵션이 나온다. productUrl 에서 옵션 파라미터를 추출해 사용.
-  let deeplinks = [];
+/** productUrl 에서 정확한 옵션(itemId/vendorItemId)까지 담은 쿠팡 URL 생성 */
+function rawProductUrl(p) {
   try {
-    const rawUrls = products.map((p) => {
-      try {
-        const u = new URL(p.productUrl);
-        const pk = u.searchParams.get('pageKey') || p.productId;
-        const it = u.searchParams.get('itemId');
-        const vi = u.searchParams.get('vendorItemId');
-        return it && vi
-          ? `https://www.coupang.com/vp/products/${pk}?itemId=${it}&vendorItemId=${vi}`
-          : `https://www.coupang.com/vp/products/${pk}`;
-      } catch {
-        return `https://www.coupang.com/vp/products/${p.productId}`;
-      }
-    });
-    deeplinks = await createDeeplinks(rawUrls);
+    const u = new URL(p.productUrl);
+    const pk = u.searchParams.get('pageKey') || p.productId;
+    const it = u.searchParams.get('itemId');
+    const vi = u.searchParams.get('vendorItemId');
+    return it && vi
+      ? `https://www.coupang.com/vp/products/${pk}?itemId=${it}&vendorItemId=${vi}`
+      : `https://www.coupang.com/vp/products/${pk}`;
   } catch {
-    /* 실패해도 productUrl(제휴태그 포함)로 대체 */
+    return `https://www.coupang.com/vp/products/${p.productId}`;
   }
+}
 
-  // 상품별 링크 항목 (링크페이지·아카이브·통지 공용)
-  const links = products.map((p, i) => ({
+/** 풀 상품 → 링크페이지/아카이브용 항목 */
+function linkItem(p) {
+  return {
     name: p.productName.split(',')[0].trim(),
     price: p.productPrice,
     image: p.productImage,
     copy: p.copy,
-    url: deeplinks[i]?.shortenUrl || p.productUrl,
-  }));
+    url: p.deeplink || p.productUrl,
+  };
+}
 
-  // ③ 카드 렌더 (카피 포함)
-  const runId = new Date().toISOString().replace(/[:.]/g, '-');
-  mkdirSync(PUB_DIR, { recursive: true });
-  const outDir = `${PUB_DIR}/cards/${runId}`;
-  const cardPaths = await buildPostCards(post, outDir, { headline });
+/**
+ * 이번 주 풀 확보 — 있으면 재사용, 없으면(새 주) 새로 생성.
+ * 생성 시: 상품10 선정 → 딥링크 → 훅/카피 → 저장 + 링크페이지 갱신.
+ */
+export async function getOrCreatePool(now = Date.now()) {
+  const existing = readPool();
+  if (isCurrentWeek(existing, now)) return existing;
+  return createWeekPool(now);
+}
 
-  // 릴스 영상 생성 — 세로 전용 9:16 카드 렌더 → mp4. 내레이션 + 배경음.
-  const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
-  const REEL_PRODUCTS = 3; // 릴스는 3개만(티저) → 15초 이내·완주율↑. 전체는 캐러셀에.
-  const reelShown = products.slice(0, REEL_PRODUCTS);
-  const hook = reelHook || headline; // 릴스 첫 프레임/첫 대사 = 강한 훅
-  const reelCardPaths = await buildReelCards(post, `${PUB_DIR}/reels/${runId}/cards`, {
-    headline: hook,
-    maxProducts: REEL_PRODUCTS,
+export async function createWeekPool(now = Date.now()) {
+  const weekKey = weekKeyOf(now);
+  const products = await selectWeeklyPool({ count: 10 });
+  if (products.length < 6) {
+    throw new Error(`주간 풀 상품 부족(${products.length}개) — 생성 중단`);
+  }
+
+  // 딥링크 (옵션 일치)
+  let deeplinks = [];
+  try {
+    deeplinks = await createDeeplinks(products.map(rawProductUrl));
+  } catch {
+    /* 실패 시 productUrl 로 대체 */
+  }
+  products.forEach((p, i) => {
+    p.deeplink = deeplinks[i]?.shortenUrl || p.productUrl;
   });
-  const bgmPath = 'assets/reel-bgm.mp3';
-  // 훅 최적화 내레이션: 첫 1초에 훅부터, 제품은 짧게(가격 낭독 X → 템포↑)
-  const narration = [
-    hook.replace(/\s*\n\s*/g, ' '),
-    ...reelShown.map((p) => p.copy || ''),
-    `링크는 프로필에서`,
-  ];
-  await buildReel(reelCardPaths, {
-    outPath: reelPath,
-    bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
-    narration,
+
+  // 훅/카피/해시태그 일괄 생성 후 상품에 부착
+  const content = await generatePoolContent(products);
+  products.forEach((p, i) => {
+    p.hook = content[i].hook;
+    p.copy = content[i].copy;
+    p.narration = content[i].narration;
+    p.tags = content[i].tags;
   });
 
-  const manifest = {
-    runId,
-    reelFile: `${runId}/reel.mp4`,
-    category: { id: category.id, name: category.name, tier: category.tier },
+  const pool = {
+    weekKey,
+    createdAt: new Date(now).toISOString(),
     products: products.map((p) => ({
       productId: p.productId,
       productName: p.productName,
       productPrice: p.productPrice,
       productUrl: p.productUrl,
       productImage: p.productImage,
+      deeplink: p.deeplink,
+      hook: p.hook,
       copy: p.copy,
+      narration: p.narration,
+      tags: p.tags,
+      category: p.category,
+      _score: p._score ?? 0,
     })),
-    cardFiles: cardPaths.map((p) => basename(p)),
-    cardPaths,
-    caption,
-    hashtags,
-    deeplinks,
-    links,
+    reels: buildSchedule(),
+    carousel: { picks: [], posted: false, postId: null, postedAt: null },
   };
-  writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2));
+  skipPastSlots(pool, now); // 주 중간 시작 시 지난 날짜 슬롯은 건너뜀 → 오늘부터 깔끔하게
+  savePool(pool);
+  refreshLinkPage(pool);
+  return pool;
+}
 
-  // 프로필 링크 목록 (복사용 md)
-  const linksMd =
-    `# ${category.name} — 오늘의 제휴 링크\n\n` +
-    links
-      .map((l) => `- ${l.name} (${l.price?.toLocaleString('ko-KR')}원)\n  ${l.url}`)
-      .join('\n') +
-    '\n';
-  writeFileSync(`${PUB_DIR}/latest-links.md`, linksMd);
-
-  // 아카이브 갱신(과거 상품도 구매 가능) + 링크 페이지(docs/index.html) 재생성
-  const date = runId.slice(0, 10); // YYYY-MM-DD
-  const archive = addEntry({ runId, date, category: category.name, products: links });
+/** 이번 주 풀을 링크 페이지(docs/index.html)에 반영 (허브 페이지) */
+function refreshLinkPage(pool) {
+  const items = pool.products.map(linkItem);
+  const archive = addEntry({
+    runId: pool.weekKey,
+    date: pool.weekKey,
+    category: '이번 주 추천템',
+    products: items,
+  });
   buildLinkPage(archive);
-
-  return manifest;
 }
 
-/** manifest 읽기 */
-export function readManifest() {
-  return JSON.parse(readFileSync(MANIFEST, 'utf8'));
+/**
+ * 지금 게시해야 할 것들(밀린 릴스 슬롯 + 금요일 캐러셀)을 렌더 → 큐 매니페스트 기록.
+ * (게시는 publishDue 에서. 그 전에 워크플로가 published/ 를 커밋해 공개 URL 확보)
+ */
+export async function generateDue(now = Date.now()) {
+  const pool = await getOrCreatePool(now);
+  mkdirSync(PUB_DIR, { recursive: true });
+  const items = [];
+
+  // ── 밀린 릴스 슬롯(최대 2개 따라잡기) ──
+  for (const slot of dueReelSlots(pool, now, 2)) {
+    const p = pool.products[slot.productIdx];
+    if (!p) continue;
+    // 장점 내레이션(3~4문장) — 없으면 카피로 대체
+    const benefits = (p.narration && p.narration.length ? p.narration : [p.copy]).slice(0, 4);
+    // 마지막 CTA용 "다른 추천템" 4개 — 슬롯별로 시작점을 돌려 다양하게
+    const rest = pool.products.filter((_, idx) => idx !== slot.productIdx);
+    const start = slot.slot % Math.max(rest.length, 1);
+    const others = [...rest.slice(start), ...rest.slice(0, start)].slice(0, 4);
+
+    const runId = `${pool.weekKey}-r${slot.slot}`;
+    const reelDir = `${PUB_DIR}/reels/${runId}/cards`;
+    const reelCardPaths = await buildSingleReelCards(reelDir, {
+      product: p, hook: p.hook, category: p.category?.name || '', benefits, others,
+    });
+    const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
+    const bgmPath = 'assets/reel-bgm.mp3';
+    // 내레이션: 표지=훅 → 장점 슬라이드마다 1문장 → 마지막=다른템 유도 (카드 수와 일치)
+    const narration = [
+      p.hook.replace(/\s*\n\s*/g, ' '),
+      ...benefits,
+      '이번 주 다른 추천템도 프로필 링크에 있어요',
+    ];
+    await buildReel(reelCardPaths, {
+      outPath: reelPath,
+      bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
+      narration,
+    });
+    const caption = buildReelCaption({
+      hook: p.hook, copy: p.copy, name: linkItem(p).name, url: p.deeplink, tags: p.tags,
+    });
+    items.push({
+      type: 'reel',
+      slot: slot.slot,
+      productIdx: slot.productIdx,
+      runId,
+      reelFile: `${runId}/reel.mp4`,
+      caption,
+      name: linkItem(p).name,
+    });
+  }
+
+  // ── 금요일 캐러셀 (풀에서 5개 재구성) ──
+  if (carouselDue(pool, now)) {
+    const picks = pickCarousel(pool, 5);
+    const chosen = picks.map((i) => ({ ...pool.products[i] }));
+    // 캐러셀 캡션(묶음 소개) 생성
+    const cap = await generateCaption({ category: { id: 'best', name: '이번 주 베스트', tier: 'high' }, products: chosen });
+    const v = validateCaption(cap.caption);
+    if (!v.ok) throw new Error(`캐러셀 캡션 검증 실패: ${v.reason}`);
+    chosen.forEach((p, i) => { p.copy = cap.copies[i] || p.copy || ''; });
+    const runId = `${pool.weekKey}-carousel`;
+    const outDir = `${PUB_DIR}/cards/${runId}`;
+    const cardPaths = await buildPostCards({ category: { name: '이번 주 베스트' }, products: chosen }, outDir, { headline: cap.headline });
+    items.push({
+      type: 'carousel',
+      runId,
+      cardFiles: cardPaths.map((p) => basename(p)),
+      caption: cap.caption,
+      picks,
+    });
+  }
+
+  const queue = { weekKey: pool.weekKey, generatedAt: new Date(now).toISOString(), items };
+  writeFileSync(QUEUE, JSON.stringify(queue, null, 2));
+  return queue;
 }
 
-/** 공개 URL 이 실제로 접근 가능(200, 이미지/영상)해질 때까지 대기 (CDN 전파) */
+export function readQueue() {
+  if (!existsSync(QUEUE)) return { items: [] };
+  return JSON.parse(readFileSync(QUEUE, 'utf8'));
+}
+
+/** 공개 URL 이 실제 접근 가능(200, 이미지/영상)해질 때까지 대기 (CDN 전파) */
 async function waitForUrl(url, { tries = 30, intervalMs = 6000 } = {}) {
   for (let i = 0; i < tries; i++) {
     try {
       const r = await fetch(url, { method: 'GET' });
       const ct = r.headers.get('content-type') || '';
-      if (r.status === 200 && (ct.includes('image') || ct.includes('video') || ct.includes('octet-stream'))) {
-        return;
-      }
-    } catch {
-      /* 네트워크 일시 오류 무시 */
-    }
+      if (r.status === 200 && (ct.includes('image') || ct.includes('video') || ct.includes('octet-stream'))) return;
+    } catch { /* 일시 오류 무시 */ }
     await new Promise((res) => setTimeout(res, intervalMs));
   }
   throw new Error(`미디어 URL 접근 대기 초과: ${url}`);
 }
 
 /**
- * ⑤~⑥ : 매니페스트의 카드를 공개 URL 로 게시하고 로그 기록.
- * @param {object} manifest
- * @returns {Promise<{postId:string, permalink?:string}>}
+ * 큐의 항목들을 실제 게시하고 풀 상태를 갱신.
+ * @returns {Promise<{posted:Array, pool:object}>}
  */
-export async function publish(manifest) {
-  const imageBase = requireEnv('IMAGE_BASE_URL').replace(/\/$/, '');
-  // 영상 베이스: .../published/cards → .../published
-  const pubBase = imageBase.replace(/\/cards$/, '');
-  const format = (process.env.POST_FORMAT || 'carousel').toLowerCase(); // carousel | reel | both
+export async function publishDue(now = Date.now()) {
+  const imageBase = requireEnv('IMAGE_BASE_URL').replace(/\/$/, ''); // .../published/cards
+  const pubBase = imageBase.replace(/\/cards$/, ''); // .../published
+  const queue = readQueue();
+  const pool = readPool();
+  const posted = [];
 
-  const out = {};
-
-  if (format === 'carousel' || format === 'both') {
-    const imageUrls = manifest.cardFiles.map(
-      (f) => `${imageBase}/${manifest.runId}/${f}`
-    );
-    await waitForUrl(imageUrls[0]); // CDN 전파 대기
-    const r = await publishCarousel({ imageUrls, caption: manifest.caption });
-    out.carousel = { postId: r.id, permalink: r.permalink };
+  for (const item of queue.items) {
+    try {
+      if (item.type === 'reel') {
+        // 이미 올린 슬롯이면 건너뜀 (중복 방지)
+        const rec = pool?.reels.find((r) => r.slot === item.slot);
+        if (rec?.posted) continue;
+        const videoUrl = `${pubBase}/reels/${item.reelFile}`;
+        await waitForUrl(videoUrl);
+        const r = await publishReel({ videoUrl, caption: item.caption });
+        if (pool) { markReelPosted(pool, item.slot, r.id, now); savePool(pool); }
+        const p = pool?.products[item.productIdx];
+        if (p) appendPosted([{ productId: p.productId, productName: p.productName }], p.category);
+        posted.push({ type: 'reel', slot: item.slot, name: item.name, permalink: r.permalink, postId: r.id });
+      } else if (item.type === 'carousel') {
+        if (pool?.carousel?.posted) continue;
+        const imageUrls = item.cardFiles.map((f) => `${imageBase}/${item.runId}/${f}`);
+        await waitForUrl(imageUrls[0]);
+        const r = await publishCarousel({ imageUrls, caption: item.caption });
+        if (pool) {
+          pool.carousel.picks = item.picks;
+          markCarouselPosted(pool, r.id, now);
+          savePool(pool);
+        }
+        const prods = (item.picks || []).map((i) => pool?.products[i]).filter(Boolean);
+        if (prods.length) appendPosted(prods.map((p) => ({ productId: p.productId, productName: p.productName })), { name: '이번 주 베스트', tier: 'high' });
+        posted.push({ type: 'carousel', permalink: r.permalink, postId: r.id });
+      }
+    } catch (e) {
+      posted.push({ type: item.type, error: e.message });
+    }
   }
-
-  if (format === 'reel' || format === 'both') {
-    const videoUrl = `${pubBase}/reels/${manifest.reelFile}`;
-    await waitForUrl(videoUrl); // CDN 전파 대기
-    const r = await publishReel({ videoUrl, caption: manifest.caption });
-    out.reel = { postId: r.id, permalink: r.permalink };
-  }
-
-  // 로그 기록 (tier 포함)
-  appendPosted(manifest.products, manifest.category);
-
-  return out;
+  return { posted, pool };
 }

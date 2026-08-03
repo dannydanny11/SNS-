@@ -104,3 +104,64 @@ export async function selectProducts(opts = {}) {
 
   return { category, products };
 }
+
+/**
+ * 주간 상품 풀 선정 — 여러 카테고리를 섞어 다양성 있게 count개(기본 10).
+ * 각 상품에 category(표시용)·_score 를 붙여 반환. 최근 30일 게시분 제외.
+ * @param {object} [opts]
+ * @param {number} [opts.count=10]
+ * @returns {Promise<Array>} 상품 배열 (각 항목에 .category = {id,name,tier})
+ */
+export async function selectWeeklyPool(opts = {}) {
+  const count = opts.count ?? 10;
+  const excluded = recentProductIds(30);
+  const seen = new Set();
+
+  // 카테고리별 후보 그룹 수집
+  const groups = []; // [{ category, list: [candidates...] }]
+  for (const category of CATEGORIES) {
+    const list = [];
+    for (const keyword of category.keywords) {
+      let results = [];
+      try {
+        results = await searchProducts(keyword, 10);
+      } catch (e) {
+        console.warn(`  (검색 실패: ${keyword} — ${e.message})`);
+        continue;
+      }
+      for (const p of results) {
+        const id = String(p.productId);
+        if (seen.has(id) || excluded.has(id)) continue;
+        if (p.productPrice < PRICE_MIN || p.productPrice > PRICE_MAX) continue;
+        if (!p.productImage) continue;
+        seen.add(id);
+        list.push({
+          ...p,
+          _keyword: keyword,
+          _score: scoreProduct(p),
+          category: { id: category.id, name: category.name, tier: category.tier },
+        });
+      }
+    }
+    list.sort((a, b) => b._score - a._score);
+    if (list.length) groups.push({ category, list });
+  }
+
+  // 라운드로빈: 카테고리를 번갈아 하나씩 뽑아 다양성 확보 (high tier 우선 배치)
+  groups.sort((a, b) => (a.category.tier === 'low' ? 1 : 0) - (b.category.tier === 'low' ? 1 : 0));
+  const pool = [];
+  let round = 0;
+  while (pool.length < count) {
+    let added = false;
+    for (const g of groups) {
+      if (g.list[round]) {
+        pool.push(g.list[round]);
+        added = true;
+        if (pool.length >= count) break;
+      }
+    }
+    if (!added) break;
+    round++;
+  }
+  return pool;
+}

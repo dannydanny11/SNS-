@@ -2,7 +2,7 @@
 // 확정 시안: C (소프트 크림).  표지 1 + 제품 N + CTA 1.
 import { THEMES } from './theme.js';
 import { buildCover, buildProduct, buildCta } from './templates.js';
-import { buildReelCover, buildReelProduct, buildReelCta } from './reelTemplates.js';
+import { buildReelCover, buildReelProduct, buildReelCta, buildReelSingleCover, buildReelBenefit, buildReelTeaserCta } from './reelTemplates.js';
 import { renderCard, renderReel } from './render.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
@@ -85,5 +85,39 @@ export async function buildReelCards(post, outDir, opts = {}) {
   writeFileSync(ctaPath, await renderReel(buildReelCta(theme)));
   files.push(ctaPath);
 
+  return files;
+}
+
+/**
+ * 단품 릴스 카드 세트 — 표지(훅+큰이미지) + 장점 슬라이드 N + 다른템 유도 CTA.
+ * @param {object} opts
+ * @param {object} opts.product     대상 상품(productImage/productName/productPrice/copy)
+ * @param {string} opts.hook        표지 훅
+ * @param {string} opts.category    카테고리명
+ * @param {string[]} opts.benefits  장점 문구 배열(각 슬라이드 1개)
+ * @param {Array} opts.others       마지막 CTA 미니모음용 다른 상품들
+ * @returns {Promise<string[]>}
+ */
+export async function buildSingleReelCards(outDir, opts) {
+  const theme = THEMES[CONFIRMED_THEME];
+  const { product, hook, category = '', benefits = [], others = [] } = opts;
+  mkdirSync(outDir, { recursive: true });
+  const files = [];
+  let n = 1;
+  const push = async (html) => {
+    const p = `${outDir}/${String(n).padStart(2, '0')}.jpg`;
+    writeFileSync(p, await renderReel(html));
+    files.push(p);
+    n++;
+  };
+
+  await push(buildReelSingleCover(theme, { headline: hook, category, product }));
+  const steps = benefits.length;
+  for (let i = 0; i < steps; i++) {
+    await push(buildReelBenefit(theme, {
+      product, benefit: benefits[i], step: i, steps, showPrice: i === steps - 1,
+    }));
+  }
+  await push(buildReelTeaserCta(theme, { others }));
   return files;
 }

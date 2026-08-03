@@ -42,7 +42,7 @@ export function buildLinkPage(archive) {
   const past = list.slice(1);
 
   const todayHtml = today
-    ? `<div class="sec">📌 오늘의 추천템 <span class="cat">${esc(today.category)}</span></div>
+    ? `<div class="sec">📌 <span class="cat-main">${esc(today.category)}</span></div>
        ${today.products.map(itemHtml).join('')}`
     : '';
 
@@ -91,7 +91,7 @@ export function buildLinkPage(archive) {
 </style></head>
 <body>
   <div class="brand">atoztem</div>
-  <div class="tagline">매일 올라오는 가성비템 · 이미지를 눌러 구매</div>
+  <div class="tagline">매주 올라오는 가성비템 · 이미지를 눌러 구매</div>
   ${todayHtml}
   ${pastHtml}
   <div class="disc">${esc(DISCLOSURE)}</div>

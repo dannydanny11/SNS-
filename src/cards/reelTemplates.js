@@ -70,6 +70,68 @@ export function buildReelProduct(theme, { index, total, product }) {
   return shell(t, inner, t.bg, t.fg);
 }
 
+/** 단품 릴스 표지 (9:16) — 큰 훅 + 제품 이미지 하나 크게 */
+export function buildReelSingleCover(theme, { headline, category, product }) {
+  const t = theme;
+  const inner = `
+  <div class="card" style="padding:80px 80px;">
+    <div style="font-size:42px;color:${t.sub};font-weight:800;">${esc(category)} · 이번 주 추천</div>
+    <div style="margin-top:16px;font-size:122px;font-weight:900;line-height:1.1;letter-spacing:-3px;white-space:pre-line;">${esc(headline)}</div>
+    <div style="margin-top:48px;flex:1;min-height:0;background:#fff;border-radius:44px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+      <img src="${esc(product.productImage)}" style="max-width:90%;max-height:90%;object-fit:contain;">
+    </div>
+  </div>`;
+  return shell(t, inner, t.coverBg, t.coverFg);
+}
+
+/** 단품 릴스 장점 슬라이드 (9:16) — 이미지 + 장점 문구(+선택 가격) */
+export function buildReelBenefit(theme, { product, benefit, step, steps, showPrice }) {
+  const t = theme;
+  const dots = Array.from({ length: steps }, (_, k) =>
+    `<span style="width:22px;height:22px;border-radius:50%;background:${k === step ? t.accent : '#00000022'};display:inline-block;margin-right:12px;"></span>`
+  ).join('');
+  const price = showPrice
+    ? `<div style="margin-top:20px;"><span style="font-size:84px;font-weight:900;color:${t.priceColor};">${won(product.productPrice)}</span>
+         <span style="font-size:34px;font-weight:700;color:${t.sub};margin-left:14px;">와우·쿠폰가는 링크에서 더 저렴 ↓</span></div>`
+    : '';
+  const inner = `
+  <div class="card" style="padding:76px 80px 90px;">
+    <div style="width:100%;height:940px;background:${t.card};border-radius:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 auto;">
+      <img src="${esc(product.productImage)}" style="max-width:92%;max-height:92%;object-fit:contain;">
+    </div>
+    <div style="margin-top:48px;">${dots}</div>
+    <div style="margin-top:24px;font-size:66px;font-weight:900;line-height:1.32;letter-spacing:-1px;">${esc(benefit)}</div>
+    ${price}
+  </div>`;
+  return shell(t, inner, t.bg, t.fg);
+}
+
+/** 단품 릴스 마무리 CTA (9:16) — 다른 추천템 미니 모음으로 링크 클릭 유도 */
+export function buildReelTeaserCta(theme, { others = [] }) {
+  const t = theme;
+  const tiles = others
+    .slice(0, 4)
+    .map(
+      (p) =>
+        `<div style="background:#fff;border-radius:28px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+           <img src="${esc(p.productImage)}" style="width:100%;height:100%;object-fit:cover;"></div>`
+    )
+    .join('');
+  const inner = `
+  <div class="card" style="padding:84px 80px;">
+    <div style="color:${t.accent};font-size:44px;font-weight:800;letter-spacing:2px;">atoztem</div>
+    <div style="margin-top:20px;font-size:88px;font-weight:900;line-height:1.2;">이번 주 추천템<br>더 있어요</div>
+    <div style="margin-top:24px;font-size:52px;font-weight:800;color:${t.accent};">👉 프로필 링크에서 전체 보기</div>
+    <div style="margin-top:44px;flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px;">
+      ${tiles}
+    </div>
+    <div style="margin-top:36px;font-size:30px;color:${t.sub};line-height:1.55;">
+      이 게시물은 쿠팡 파트너스 활동의 일환으로,<br>이에 따른 일정액의 수수료를 제공받습니다.
+    </div>
+  </div>`;
+  return shell(t, inner, t.coverBg, t.coverFg);
+}
+
 /** 릴스 CTA (9:16) */
 export function buildReelCta(theme) {
   const t = theme;

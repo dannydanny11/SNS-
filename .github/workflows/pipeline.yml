@@ -1,24 +1,19 @@
-name: atoztem 자동 게시
+name: atoztem 자동 게시 (주간 풀)
 
 on:
   schedule:
-    # GitHub 예약은 누락이 잦아 오전에 여러 번 시도(가드가 중복 게시 방지).
-    - cron: '17 23 * * *' # KST 08:17
-    - cron: '17 1 * * *'  # KST 10:17
-    - cron: '17 4 * * *'  # KST 13:17
+    # 시각은 UTC. KST = UTC+9. 슬롯 기준 게시라 지연돼도 밀린 슬롯을 따라잡음.
+    - cron: '0 23 * * 0-4' # 평일 오전 08:00 KST (월~금) — 오전 릴스 / 월요일엔 풀 생성
+    - cron: '0 10 * * 1-5' # 평일 저녁 19:00 KST (월~금) — 저녁 릴스
+    - cron: '0 11 * * 5'   # 금요일 20:00 KST — 캐러셀(5개)
+    - cron: '0 3 * * 1-5'  # 평일 12:00 KST — 누락 따라잡기(안전망)
   workflow_dispatch:
-    # 수동 트리거 (첫 게시 테스트용)
     inputs:
       dry_run:
         description: '게시하지 않고 생성만 (1=예)'
         required: false
         default: '0'
-      format:
-        description: '게시 형식 (carousel / reel / both)'
-        required: false
-        default: 'both'
 
-# 카드/로그를 저장소에 커밋하기 위한 쓰기 권한
 permissions:
   contents: write
 
@@ -42,26 +37,25 @@ jobs:
       - name: 한글 폰트 설치 (카드 렌더링용)
         run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
 
-      # ── 1단계: 카드 + 캡션 생성 ──────────────────────────
-      - name: 생성 (①~④)
+      # ── 1단계: 풀 확보 + 밀린 슬롯 렌더 → published/queue.json ──
+      - name: 생성 (풀/릴스/캐러셀)
         env:
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
         run: npm run pipeline:generate
 
-      # 생성된 카드/매니페스트를 커밋 → raw URL 로 공개
-      - name: 카드 커밋 & 푸시
+      # 생성물(카드/영상/풀/링크페이지)을 커밋 → raw URL 로 공개
+      - name: 생성물 커밋 & 푸시
         run: |
           git config user.name "atoztem-bot"
           git config user.email "bot@atoztem.local"
           git add published/ docs/ data/
-          git commit -m "cards: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
+          git commit -m "gen: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
           git push
 
-      # ── 2단계: 게시 ────────────────────────────────────
-      - name: 게시 (⑤~⑥)
+      # ── 2단계: 큐 게시 ──
+      - name: 게시
         if: ${{ github.event.inputs.dry_run != '1' }}
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
@@ -69,16 +63,14 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/published/cards
-          POST_FORMAT: ${{ github.event.inputs.format || 'both' }}
-          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
         run: npm run pipeline:publish
 
-      # posted_log 갱신분 커밋
-      - name: 로그 커밋 & 푸시
+      # 게시 상태(풀/로그) 갱신분 커밋
+      - name: 상태 커밋 & 푸시
         if: ${{ github.event.inputs.dry_run != '1' }}
         run: |
           git config user.name "atoztem-bot"
           git config user.email "bot@atoztem.local"
-          git add data/posted_log.json
-          git commit -m "log: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
+          git add data/
+          git commit -m "state: $(date -u +%Y-%m-%dT%H:%M:%SZ)" || echo "변경 없음"
           git push

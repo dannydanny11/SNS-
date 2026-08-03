@@ -16,7 +16,8 @@ const FPS = 30;
 const PAD_AFTER = 0.45; // 대사 뒤 여유(초) — 짧게(템포↑, 완주율↑)
 const MIN_CARD = 1.7; // 카드 최소 노출(초)
 const LEAD = 0.12; // 카드 뜨고 대사 시작까지(초)
-const MAX_TOTAL = 15; // 릴스 총 길이 상한(초)
+const MIN_TOTAL = 20; // 릴스 총 길이 하한(초) — 단품이라도 20초 이상 알차게
+const MAX_TOTAL = 26; // 릴스 총 길이 상한(초)
 
 async function ff(args) {
   await execFileP(ffmpegPath, ['-hide_banner', '-loglevel', 'error', '-y', ...args], {
@@ -92,6 +93,10 @@ export async function buildReel(cardPaths, opts = {}) {
       const floor = (narr[i]?.duration || 0) + 0.12;
       durations[i] = Math.max(durations[i] * scale, floor);
     }
+  } else if (sum0 < MIN_TOTAL && durations.length) {
+    // 총 길이 하한: 모자라면 카드 노출을 비례 확대해 20초 이상 확보
+    const scale = MIN_TOTAL / sum0;
+    for (let i = 0; i < durations.length; i++) durations[i] *= scale;
   }
 
   // 2) 카드별 세로 클립 (페이드 없음 → 검정화면 X)

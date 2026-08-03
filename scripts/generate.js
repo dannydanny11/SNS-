@@ -1,23 +1,21 @@
-// GitHub Actions 1단계: 카드+캡션 생성 → out/latest-manifest.json.
-import { generate } from '../src/pipeline.js';
+// GitHub Actions 1단계: 이번 주 풀 확보 + 지금 밀린 슬롯(릴스/캐러셀) 렌더 → published/queue.json.
+import { generateDue } from '../src/pipeline.js';
 import { closeBrowser } from '../src/cards/render.js';
 import { notify } from '../src/notify.js';
-import { postedTodayKST } from '../src/postedLog.js';
 
-// 오늘 이미 게시했으면 건너뜀 (여러 번 예약해도 중복 안 되게). FORCE=1 이면 무시.
-if (process.env.FORCE !== '1' && postedTodayKST()) {
-  console.log('오늘 이미 게시함 → 이번 회차 건너뜀');
-  process.exit(0);
-}
-
-generate()
-  .then(async (m) => {
+generateDue()
+  .then(async (queue) => {
     await closeBrowser();
-    console.log(`생성 완료: ${m.category.name}, 카드 ${m.cardFiles.length}장, runId ${m.runId}`);
-    const linkList = m.links.map((l) => `• ${l.name}\n${l.url}`).join('\n');
-    await notify(
-      `🧪 생성 완료 [${m.category.name}] — 카드 ${m.cardFiles.length}장\n\n📎 프로필 링크에 넣을 제휴 링크:\n${linkList}`
-    );
+    const n = queue.items.length;
+    if (n === 0) {
+      console.log('이번엔 게시할 슬롯 없음(예정시각 전이거나 이미 완료).');
+      return;
+    }
+    const summary = queue.items
+      .map((it) => (it.type === 'reel' ? `릴스[${it.slot}] ${it.name}` : `캐러셀(5개)`))
+      .join(', ');
+    console.log(`생성 완료 — ${n}건: ${summary}`);
+    await notify(`🧪 atoztem 생성 [${queue.weekKey}] — ${n}건\n${summary}`);
   })
   .catch(async (e) => {
     await closeBrowser();
