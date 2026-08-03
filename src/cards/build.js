@@ -62,8 +62,10 @@ export async function buildPostCards(post, outDir, opts = {}) {
 export async function buildReelCards(post, outDir, opts = {}) {
   const theme = THEMES[CONFIRMED_THEME];
   const { category, products } = post;
-  const total = products.length;
+  const total = products.length; // 표지엔 전체 개수(BEST N) 유지
   const headline = opts.headline || category.headline || category.name;
+  // 릴스는 짧게 — 제품 일부만 노출(티저). 전체는 피드 캐러셀에.
+  const shown = products.slice(0, opts.maxProducts || products.length);
   mkdirSync(outDir, { recursive: true });
   const files = [];
 
@@ -72,8 +74,8 @@ export async function buildReelCards(post, outDir, opts = {}) {
   writeFileSync(coverPath, await renderReel(cover));
   files.push(coverPath);
 
-  for (let i = 0; i < products.length; i++) {
-    const html = buildReelProduct(theme, { index: i + 1, total, product: products[i] });
+  for (let i = 0; i < shown.length; i++) {
+    const html = buildReelProduct(theme, { index: i + 1, total: shown.length, product: shown[i] });
     const p = `${outDir}/${String(i + 2).padStart(2, '0')}-product.jpg`;
     writeFileSync(p, await renderReel(html));
     files.push(p);

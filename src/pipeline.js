@@ -78,16 +78,18 @@ export async function generate() {
 
   // 릴스 영상 생성 — 세로 전용 9:16 카드 렌더 → mp4. 내레이션 + 배경음.
   const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
+  const REEL_PRODUCTS = 3; // 릴스는 3개만(티저) → 15초 이내·완주율↑. 전체는 캐러셀에.
+  const reelShown = products.slice(0, REEL_PRODUCTS);
   const reelCardPaths = await buildReelCards(post, `${PUB_DIR}/reels/${runId}/cards`, {
     headline,
+    maxProducts: REEL_PRODUCTS,
   });
   const bgmPath = 'assets/reel-bgm.mp3';
+  // 훅 최적화 내레이션: 첫 1초에 훅(표지 문구)부터, 제품은 짧게(가격 낭독 X → 템포↑)
   const narration = [
-    `오늘은 ${category.name}, ${products.length}가지 골라봤어요`,
-    ...products.map(
-      (p) => `${p.copy}. ${p.productPrice?.toLocaleString('ko-KR')}원이에요`
-    ),
-    `마음에 들면 프로필 링크에서 확인하세요`,
+    headline.replace(/\s*\n\s*/g, ' '),
+    ...reelShown.map((p) => p.copy || ''),
+    `링크는 프로필에서`,
   ];
   await buildReel(reelCardPaths, {
     outPath: reelPath,

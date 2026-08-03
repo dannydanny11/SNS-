@@ -32,16 +32,12 @@ export function buildReelCover(theme, { headline, category, total, products = []
            <img src="${esc(p.productImage)}" style="width:100%;height:100%;object-fit:cover;"></div>`
     )
     .join('');
+  // 릴스 첫 프레임: 인트로/로고 없이 곧바로 큰 훅 + 제품(무음·2초컷 대비)
   const inner = `
-  <div class="card" style="padding:90px 80px;">
-    <div style="color:${t.accent};font-size:42px;font-weight:800;letter-spacing:2px;">atoztem</div>
-    <div style="margin-top:34px;font-size:44px;color:${t.sub};font-weight:700;">${esc(category)}</div>
-    <div style="margin-top:16px;font-size:104px;font-weight:900;line-height:1.14;letter-spacing:-2px;white-space:pre-line;">${esc(headline)}</div>
-    <div style="margin-top:38px;display:flex;align-items:center;gap:20px;">
-      <span style="background:${t.accent};color:#fff;font-size:44px;font-weight:800;padding:16px 40px;border-radius:999px;">BEST ${total}</span>
-      <span style="font-size:40px;color:${t.sub};">밀어서 보기 →</span>
-    </div>
-    <div style="margin-top:56px;flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px;">
+  <div class="card" style="padding:84px 80px;">
+    <div style="font-size:44px;color:${t.sub};font-weight:800;">${esc(category)} BEST ${total}</div>
+    <div style="margin-top:18px;font-size:118px;font-weight:900;line-height:1.12;letter-spacing:-3px;white-space:pre-line;">${esc(headline)}</div>
+    <div style="margin-top:54px;flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:24px;">
       ${tiles}
     </div>
   </div>`;

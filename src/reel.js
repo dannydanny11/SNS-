@@ -13,9 +13,10 @@ import { optionalEnv } from './config.js';
 const execFileP = promisify(execFile);
 const BG = '0xF5EDE1'; // 카드 여백 크림색
 const FPS = 30;
-const PAD_AFTER = 0.9; // 대사 뒤 여유(초)
-const MIN_CARD = 2.2; // 카드 최소 노출(초)
-const LEAD = 0.2; // 카드 뜨고 대사 시작까지(초)
+const PAD_AFTER = 0.45; // 대사 뒤 여유(초) — 짧게(템포↑, 완주율↑)
+const MIN_CARD = 1.7; // 카드 최소 노출(초)
+const LEAD = 0.12; // 카드 뜨고 대사 시작까지(초)
+const MAX_TOTAL = 15; // 릴스 총 길이 상한(초)
 
 async function ff(args) {
   await execFileP(ffmpegPath, ['-hide_banner', '-loglevel', 'error', '-y', ...args], {
@@ -38,7 +39,7 @@ async function mediaDuration(file) {
 async function narrate(lines, outDir) {
   mkdirSync(outDir, { recursive: true });
   const voice = optionalEnv('TTS_VOICE') || 'ko-KR-SunHiNeural';
-  const rate = optionalEnv('TTS_RATE') || '+10%';
+  const rate = optionalEnv('TTS_RATE') || '+16%';
   const tts = new MsEdgeTTS();
   await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
 
@@ -81,8 +82,17 @@ export async function buildReel(cardPaths, opts = {}) {
   }
   const durations = cardPaths.map((_, i) => {
     const d = narr[i]?.duration || 0;
-    return d > 0 ? Math.max(d + PAD_AFTER, MIN_CARD) : 2.6;
+    return d > 0 ? Math.max(d + PAD_AFTER, MIN_CARD) : 2.2;
   });
+  // 총 길이 상한: 넘으면 여유분만 비례 축소(대사 길이 아래로는 안 줄임)
+  const sum0 = durations.reduce((a, b) => a + b, 0);
+  if (sum0 > MAX_TOTAL) {
+    const scale = MAX_TOTAL / sum0;
+    for (let i = 0; i < durations.length; i++) {
+      const floor = (narr[i]?.duration || 0) + 0.12;
+      durations[i] = Math.max(durations[i] * scale, floor);
+    }
+  }
 
   // 2) 카드별 세로 클립 (페이드 없음 → 검정화면 X)
   const clips = [];
