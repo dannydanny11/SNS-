@@ -16,7 +16,7 @@ import { existsSync, writeFileSync, readFileSync, mkdirSync } from 'node:fs';
 import { basename } from 'node:path';
 import {
   readPool, savePool, isCurrentWeek, weekKeyOf, buildSchedule, skipPastSlots,
-  dueReelSlots, carouselDue, pickCarousel, markReelPosted, markCarouselPosted,
+  dueReelSlots, carouselDue, pickCarousel, markReelPosted, markCarouselPosted, nextUnpostedReel,
 } from './weekPool.js';
 
 const PUB_DIR = 'published';
@@ -132,8 +132,13 @@ export async function generateDue(now = Date.now()) {
   mkdirSync(PUB_DIR, { recursive: true });
   const items = [];
 
-  // ── 밀린 릴스 슬롯(최대 2개 따라잡기) ──
-  for (const slot of dueReelSlots(pool, now, 2)) {
+  // ── 릴스 슬롯: 예정시각 지난 것(최대2 따라잡기). FORCE_NEXT=1 이면 시각 무관 다음 1개 강제 ──
+  let reelSlots = dueReelSlots(pool, now, 2);
+  if (process.env.FORCE_NEXT === '1' && reelSlots.length === 0) {
+    const nx = nextUnpostedReel(pool);
+    if (nx) reelSlots = [nx];
+  }
+  for (const slot of reelSlots) {
     const p = pool.products[slot.productIdx];
     if (!p) continue;
     // 장점 내레이션(3~4문장) — 없으면 카피로 대체

@@ -109,6 +109,14 @@ export function dueReelSlots(pool, now = Date.now(), cap = 2) {
     .slice(0, cap);
 }
 
+/** 다음 올릴 릴스 슬롯 — 예정시각 무관, 가장 이른 미게시(건너뛴 것 제외) 1개 */
+export function nextUnpostedReel(pool) {
+  if (!pool) return null;
+  return pool.reels
+    .filter((r) => !r.posted && !r.skipped)
+    .sort((a, b) => a.slot - b.slot)[0] || null;
+}
+
 /** 캐러셀을 지금 올려야 하는가 (금 20시 지남 + 미게시) */
 export function carouselDue(pool, now = Date.now()) {
   if (!pool || !pool.carousel || pool.carousel.posted) return false;

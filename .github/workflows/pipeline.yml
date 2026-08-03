@@ -13,6 +13,10 @@ on:
         description: '게시하지 않고 생성만 (1=예)'
         required: false
         default: '0'
+      force:
+        description: '지금 바로 다음 릴스 1개 올리기 (예정시각 무시, 1=예)'
+        required: false
+        default: '0'
 
 permissions:
   contents: write
@@ -43,6 +47,7 @@ jobs:
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FORCE_NEXT: ${{ github.event.inputs.force || '0' }}
         run: npm run pipeline:generate
 
       # 생성물(카드/영상/풀/링크페이지)을 커밋 → raw URL 로 공개
