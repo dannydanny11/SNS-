@@ -84,7 +84,17 @@ export function buildReelSingleCover(theme, { headline, category, product }) {
   return shell(t, inner, t.coverBg, t.coverFg);
 }
 
-/** 단품 릴스 장점 슬라이드 (9:16) — 이미지 + 장점 문구(+선택 가격) */
+// 슬라이드별 제품 이미지 구도(확대/이동) — 같은 이미지를 여러 컷처럼 보이게
+const IMG_VIEWS = [
+  'transform:scale(1.0);',                    // 전체
+  'transform:scale(1.5) translateY(13%);',    // 위쪽 클로즈업
+  'transform:scale(1.7);',                    // 중앙 디테일
+  'transform:scale(1.5) translateY(-13%);',   // 아래쪽 클로즈업
+  'transform:scale(1.4) translateX(11%);',    // 좌측
+  'transform:scale(1.4) translateX(-11%);',   // 우측
+];
+
+/** 단품 릴스 장점 슬라이드 (9:16) — 이미지(슬라이드별 다른 구도) + 장점 문구(+선택 가격) */
 export function buildReelBenefit(theme, { product, benefit, step, steps, showPrice }) {
   const t = theme;
   const dots = Array.from({ length: steps }, (_, k) =>
@@ -94,10 +104,11 @@ export function buildReelBenefit(theme, { product, benefit, step, steps, showPri
     ? `<div style="margin-top:20px;"><span style="font-size:84px;font-weight:900;color:${t.priceColor};">${won(product.productPrice)}</span>
          <span style="font-size:34px;font-weight:700;color:${t.sub};margin-left:14px;">와우·쿠폰가는 링크에서 더 저렴 ↓</span></div>`
     : '';
+  const view = IMG_VIEWS[step % IMG_VIEWS.length];
   const inner = `
   <div class="card" style="padding:76px 80px 90px;">
     <div style="width:100%;height:940px;background:${t.card};border-radius:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 auto;">
-      <img src="${esc(product.productImage)}" style="max-width:92%;max-height:92%;object-fit:contain;">
+      <img src="${esc(product.productImage)}" style="max-width:92%;max-height:92%;object-fit:contain;${view}">
     </div>
     <div style="margin-top:48px;">${dots}</div>
     <div style="margin-top:24px;font-size:66px;font-weight:900;line-height:1.32;letter-spacing:-1px;">${esc(benefit)}</div>

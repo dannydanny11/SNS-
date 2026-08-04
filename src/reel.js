@@ -13,11 +13,13 @@ import { optionalEnv } from './config.js';
 const execFileP = promisify(execFile);
 const BG = '0xF5EDE1'; // 카드 여백 크림색
 const FPS = 30;
-const PAD_AFTER = 0.45; // 대사 뒤 여유(초) — 짧게(템포↑, 완주율↑)
-const MIN_CARD = 1.7; // 카드 최소 노출(초)
-const LEAD = 0.12; // 카드 뜨고 대사 시작까지(초)
-const MIN_TOTAL = 20; // 릴스 총 길이 하한(초) — 단품이라도 20초 이상 알차게
+const PAD_AFTER = 0.18; // 대사 뒤 여유(초) — 짧게(텀↓, 템포↑)
+const MIN_CARD = 1.2; // 카드 최소 노출(초)
+const LEAD = 0.06; // 카드 뜨고 대사 시작까지(초) — 텀↓
+const MIN_TOTAL = 20; // 릴스 총 길이 하한(초) — 단품이라도 20초 이상
 const MAX_TOTAL = 26; // 릴스 총 길이 상한(초)
+// 부족분은 마지막 카드(다른템 CTA)에 몰아 넣어 본문 대사 텀은 짧게 유지
+const KEN_ZOOM = 0.06; // 카드별 미세 줌(움직임) 최대치
 
 async function ff(args) {
   await execFileP(ffmpegPath, ['-hide_banner', '-loglevel', 'error', '-y', ...args], {
@@ -40,7 +42,7 @@ async function mediaDuration(file) {
 async function narrate(lines, outDir) {
   mkdirSync(outDir, { recursive: true });
   const voice = optionalEnv('TTS_VOICE') || 'ko-KR-SunHiNeural';
-  const rate = optionalEnv('TTS_RATE') || '+16%';
+  const rate = optionalEnv('TTS_RATE') || '+30%';
   const tts = new MsEdgeTTS();
   await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
 
@@ -83,30 +85,38 @@ export async function buildReel(cardPaths, opts = {}) {
   }
   const durations = cardPaths.map((_, i) => {
     const d = narr[i]?.duration || 0;
-    return d > 0 ? Math.max(d + PAD_AFTER, MIN_CARD) : 2.2;
+    return d > 0 ? Math.max(d + PAD_AFTER, MIN_CARD) : 1.8;
   });
   // 총 길이 상한: 넘으면 여유분만 비례 축소(대사 길이 아래로는 안 줄임)
   const sum0 = durations.reduce((a, b) => a + b, 0);
   if (sum0 > MAX_TOTAL) {
     const scale = MAX_TOTAL / sum0;
     for (let i = 0; i < durations.length; i++) {
-      const floor = (narr[i]?.duration || 0) + 0.12;
+      const floor = (narr[i]?.duration || 0) + 0.1;
       durations[i] = Math.max(durations[i] * scale, floor);
     }
   } else if (sum0 < MIN_TOTAL && durations.length) {
-    // 총 길이 하한: 모자라면 카드 노출을 비례 확대해 20초 이상 확보
-    const scale = MIN_TOTAL / sum0;
-    for (let i = 0; i < durations.length; i++) durations[i] *= scale;
+    // 하한 부족분은 '마지막 카드'(다른템 CTA)에만 몰아 넣음
+    // → 본문 대사 사이 텀은 짧게 유지, 늘어난 시간은 클릭 유도 화면에서 소진
+    durations[durations.length - 1] += MIN_TOTAL - sum0;
   }
 
   // 2) 카드별 세로 클립 (페이드 없음 → 검정화면 X)
   const clips = [];
   for (let i = 0; i < cardPaths.length; i++) {
     const clip = join(tmp, `c${i}.mp4`);
-    // 입력이 이미 9:16(1080×1920) 릴스 카드 → 그대로 채움(여백 없음)
+    const frames = Math.max(1, Math.round(durations[i] * FPS));
+    // 켄번스: 카드 번갈아 줌인/줌아웃(미세) → 정지 이미지 느낌 제거
+    const zin = i % 2 === 0;
+    const z = zin
+      ? `1+${KEN_ZOOM}*on/${frames}`
+      : `${(1 + KEN_ZOOM).toFixed(3)}-${KEN_ZOOM}*on/${frames}`;
+    // 2배 확대 소스에서 zoompan → 텍스트 잘림/떨림 최소화, 중앙 기준
     const vf =
-      `scale=1080:1920:force_original_aspect_ratio=decrease,` +
-      `pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=${BG},setsar=1,format=yuv420p`;
+      `scale=2160:3840:force_original_aspect_ratio=decrease,` +
+      `pad=2160:3840:(ow-iw)/2:(oh-ih)/2:color=${BG},setsar=1,` +
+      `zoompan=z='${z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=1080x1920:fps=${FPS},` +
+      `format=yuv420p`;
     await ff([
       '-loop', '1', '-i', resolve(cardPaths[i]),
       '-t', durations[i].toFixed(2), '-r', String(FPS),
