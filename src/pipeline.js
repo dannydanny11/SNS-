@@ -3,11 +3,12 @@
 //   게시는 카드/영상을 먼저 공개 URL(raw)로 올린 뒤 진행하므로 generate/publish 2단계.
 import { selectWeeklyPool } from './selectProducts.js';
 import { createDeeplinks } from './coupang/deeplink.js';
-import { buildPostCards, buildSingleReelCards } from './cards/build.js';
+import { buildPostCards, buildSingleReelCards, buildStoryImage } from './cards/build.js';
 import { generateCaption, generatePoolContent, buildReelCaption } from './caption.js';
 import { validateCaption } from './validateCaption.js';
 import { publishCarousel, publishReel } from './instagram.js';
 import { buildLinkPage } from './linkPage.js';
+import { buildStoryPage } from './storyPage.js';
 import { buildReel } from './reel.js';
 import { addEntry } from './archive.js';
 import { appendPosted } from './postedLog.js';
@@ -127,10 +128,17 @@ function refreshLinkPage(pool) {
  * 지금 게시해야 할 것들(밀린 릴스 슬롯 + 금요일 캐러셀)을 렌더 → 큐 매니페스트 기록.
  * (게시는 publishDue 에서. 그 전에 워크플로가 published/ 를 커밋해 공개 URL 확보)
  */
+const STORIES_PATH = 'data/stories.json';
+const kstDate = (t) => new Date(t + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+function readStories() {
+  try { return JSON.parse(readFileSync(STORIES_PATH, 'utf8')); } catch { return []; }
+}
+
 export async function generateDue(now = Date.now()) {
   const pool = await getOrCreatePool(now);
   mkdirSync(PUB_DIR, { recursive: true });
   const items = [];
+  const storyEntries = [];
 
   // ── 릴스 슬롯: 예정시각 지난 것(최대2 따라잡기). FORCE_NEXT=1 이면 시각 무관 다음 1개 강제 ──
   let reelSlots = dueReelSlots(pool, now, 2);
@@ -178,6 +186,28 @@ export async function generateDue(now = Date.now()) {
       caption,
       name: linkItem(p).name,
     });
+
+    // 반자동 스토리 카드(수동 링크스티커용) — docs/stories/ 에 렌더
+    const storyFile = `${pool.weekKey}-s${slot.slot}.jpg`;
+    await buildStoryImage(`docs/stories/${storyFile}`, {
+      product: p, hook: p.hook, category: p.category?.name || '',
+    });
+    storyEntries.push({
+      date: kstDate(now),
+      slot: slot.slot,
+      name: linkItem(p).name,
+      price: p.productPrice,
+      url: p.deeplink,
+      image: `./stories/${storyFile}`,
+    });
+  }
+
+  // 스토리 페이지 갱신(오늘분 추가, 최근 것 누적)
+  if (storyEntries.length) {
+    const keys = new Set(storyEntries.map((s) => `${s.date}#${s.slot}`));
+    const merged = [...storyEntries, ...readStories().filter((s) => !keys.has(`${s.date}#${s.slot}`))].slice(0, 30);
+    writeFileSync(STORIES_PATH, JSON.stringify(merged, null, 2) + '\n');
+    buildStoryPage(merged);
   }
 
   // ── 금요일 캐러셀 (풀에서 5개 재구성) ──

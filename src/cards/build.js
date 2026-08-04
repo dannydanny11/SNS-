@@ -3,8 +3,10 @@
 import { THEMES } from './theme.js';
 import { buildCover, buildProduct, buildCta } from './templates.js';
 import { buildReelCover, buildReelProduct, buildReelCta, buildReelSingleCover, buildReelBenefit, buildReelTeaserCta } from './reelTemplates.js';
+import { buildStoryCard } from './storyTemplate.js';
 import { renderCard, renderReel } from './render.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 export const CONFIRMED_THEME = 'C';
 
@@ -120,4 +122,11 @@ export async function buildSingleReelCards(outDir, opts) {
   }
   await push(buildReelTeaserCta(theme, { others }));
   return files;
+}
+
+/** 스토리 카드 1장 렌더 → 파일 저장 (수동 링크스티커용) */
+export async function buildStoryImage(outPath, { product, hook, category }) {
+  mkdirSync(dirname(outPath), { recursive: true });
+  writeFileSync(outPath, await renderReel(buildStoryCard(THEMES[CONFIRMED_THEME], { product, hook, category })));
+  return outPath;
 }
