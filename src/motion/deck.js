@@ -344,10 +344,12 @@ const KIND = {
                        {opacity:1,clipPath:'inset(-15% 0% -25% 0)',transform:'translateY(0px)'}] },
   img:  { dur:.95, kf:[{opacity:0,transform:'scale(.86) rotate(-3.5deg) translateY(46px)'},
                        {opacity:1,transform:'scale(1) rotate(0deg) translateY(0px)'}] },
-  // 표지 전용 — 릴스는 첫 2초가 승부라 "0프레임부터 읽히고 곧바로 자리를 잡는" 등장.
-  riseFast: { dur:.34, kf:[{opacity:.2,transform:'translateY(40px)',filter:'blur(6px)'},
+  // 표지 전용 — 첫 프레임이 곧 릴스 썸네일이자 스크롤 스토퍼다.
+  // 시작값을 충분히 진하게 둬서 0프레임에도 훅과 제품이 또렷이 읽히게 하고,
+  // 움직임은 "이미 있던 것이 살짝 자리를 잡는" 정도만 남긴다.
+  riseFast: { dur:.32, kf:[{opacity:.55,transform:'translateY(26px)',filter:'blur(3px)'},
                            {opacity:1,transform:'translateY(0px)',filter:'blur(0px)'}] },
-  imgFast:  { dur:.46, kf:[{opacity:.3,transform:'scale(.955) rotate(-1.4deg) translateY(20px)'},
+  imgFast:  { dur:.42, kf:[{opacity:.6,transform:'scale(.978) rotate(-1deg) translateY(12px)'},
                            {opacity:1,transform:'scale(1) rotate(0deg) translateY(0px)'}] },
   bar:  { dur:.62, kf:[{transform:'scaleX(0)'},{transform:'scaleX(1)'}] },
   fade: { dur:.60, kf:[{opacity:0},{opacity:1}] }

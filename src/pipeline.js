@@ -10,6 +10,7 @@ import { publishCarousel, publishReel } from './instagram.js';
 import { buildLinkPage } from './linkPage.js';
 import { buildStoryPage } from './storyPage.js';
 import { buildReel } from './reel.js';
+import { buildMotionReel } from './motion/renderMotionReel.js';
 import { addEntry } from './archive.js';
 import { appendPosted } from './postedLog.js';
 import { requireEnv } from './config.js';
@@ -159,24 +160,36 @@ export async function generateDue(now = Date.now()) {
     const others = [...rest.slice(start), ...rest.slice(0, start)].slice(0, 4);
 
     const runId = `${pool.weekKey}-r${slot.slot}`;
-    const reelDir = `${PUB_DIR}/reels/${runId}/cards`;
-    const reelCardPaths = await buildSingleReelCards(reelDir, {
-      product: p, hook: p.hook, category: p.category?.name || '', benefits, others,
-      buyHook: p.buyHook,
-    });
     const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
     const bgmPath = 'assets/reel-bgm.mp3';
-    // 내레이션: 표지=훅 → 장점 슬라이드마다 1문장 → 마지막=구매 유도 (카드 수와 일치)
-    const narration = [
-      p.hook.replace(/\s*\n\s*/g, ' '),
-      ...benefits,
-      '마음에 들면 프로필 링크에서 바로 구매하세요',
-    ];
-    await buildReel(reelCardPaths, {
-      outPath: reelPath,
-      bgmPath: existsSync(bgmPath) ? bgmPath : undefined,
-      narration,
-    });
+    const bgm = existsSync(bgmPath) ? bgmPath : undefined;
+
+    // 릴스 렌더 방식. 기본은 모션덱(애니메이션 HTML → 프레임 캡처).
+    // 문제가 생기면 워크플로/환경변수 REEL_STYLE=legacy 로 즉시 구버전(정지 카드+줌)으로 되돌린다.
+    if (process.env.REEL_STYLE === 'legacy') {
+      const reelDir = `${PUB_DIR}/reels/${runId}/cards`;
+      const reelCardPaths = await buildSingleReelCards(reelDir, {
+        product: p, hook: p.hook, category: p.category?.name || '', benefits, others,
+        buyHook: p.buyHook,
+      });
+      // 내레이션: 표지=훅 → 장점 슬라이드마다 1문장 → 마지막=구매 유도 (카드 수와 일치)
+      const narration = [
+        p.hook.replace(/\s*\n\s*/g, ' '),
+        ...benefits,
+        '마음에 들면 프로필 링크에서 바로 구매하세요',
+      ];
+      await buildReel(reelCardPaths, { outPath: reelPath, bgmPath: bgm, narration });
+    } else {
+      // 모션덱은 카드 JPG를 거치지 않는다(내레이션·씬 길이·오디오 믹스를 내부에서 처리).
+      const r = await buildMotionReel({
+        product: p, hook: p.hook, category: p.category?.name || '', benefits, others,
+        buyHook: p.buyHook, outPath: reelPath, bgmPath: bgm,
+      });
+      console.log(
+        `[reel] 모션덱 slot${slot.slot} ${r.total.toFixed(1)}s/${r.frames}프레임 ` +
+        `— 캡처 ${(r.ms.capture / 1000).toFixed(0)}s, 총 ${(r.ms.totalMs / 1000).toFixed(0)}s`
+      );
+    }
     const caption = buildReelCaption({
       hook: p.hook, copy: p.copy, name: linkItem(p).name, url: p.deeplink, tags: p.tags,
     });

@@ -102,6 +102,7 @@ async function motion() {
     product, hook, category, benefits, others,
     outPath: `${dir}/motion.mp4`,
     bgmPath,
+    keepHtml: true, // 브라우저로 애니메이션 직접 확인용
   });
   console.log(`  길이 ${r.total.toFixed(1)}s / ${r.frames}프레임`);
   console.log(`  TTS ${(r.ms.tts / 1000).toFixed(1)}s · 이미지 ${(r.ms.images / 1000).toFixed(1)}s · ` +

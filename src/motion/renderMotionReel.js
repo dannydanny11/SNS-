@@ -156,7 +156,10 @@ export async function buildMotionReel(o) {
   const html = buildMotionDeckHtml({
     product, image, hook, category, benefits, otherImages, durations, buyHook: o.buyHook,
   });
-  const htmlPath = join(outDir, 'deck.html');
+  // deck.html 은 상품 이미지를 data URI 로 품고 있어 3~6MB 다.
+  // 산출물 폴더(published/)는 워크플로가 통째로 커밋하므로 기본은 임시폴더에 쓰고 지운다.
+  // 브라우저로 애니메이션을 직접 확인하고 싶을 때만 keepHtml: true.
+  const htmlPath = o.keepHtml ? join(outDir, 'deck.html') : join(tmp, 'deck.html');
   writeFileSync(htmlPath, html);
 
   // ── 프레임 캡처 ────────────────────────────────────────────────

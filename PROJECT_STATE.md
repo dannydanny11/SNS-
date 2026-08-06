@@ -197,7 +197,23 @@ docs/
    **⚠️ 이 2차 수정으로 라이브 파이프라인도 함께 바뀌었다** (1차 POC 때와 달리 `reel.js`/`reelTemplates.js`/`build.js`/`caption.js`/`pipeline.js` 수정됨). 안전 구역·텀 제거·구매 훅은 모션덱 채택 여부와 무관하게 현재 릴스에도 필요한 개선이라 함께 적용한 것. 다음 게시분부터 반영된다.
 
    **렌더 시간 재실측**: 모션덱 58초 / 현재 버전 21초 → **2.8배**.
-   **남은 결정**: 사용자가 두 영상을 보고 채택 여부 판단 → 채택 시 (a) TTS/오디오 믹스 공통 모듈 추출(현재 POC는 `reel.js` 로직을 의도적으로 복제해 둠), (b) `pipeline.js` 에서 `buildReel` → `buildMotionReel` 교체, (c) CI 폰트 설치 + 렌더 시간 실측.
+
+   ### ✅ 채택 확정 — 파이프라인 연결 완료 (2026-08-07)
+   사용자가 두 영상을 비교한 뒤 **모션덱 채택**을 결정. `pipeline.js` 의 릴스 렌더가
+   `buildSingleReelCards` + `buildReel` → **`buildMotionReel`** 로 교체됨(모션덱은 카드 JPG를 거치지 않는다).
+
+   - **롤백 스위치**: 환경변수 `REEL_STYLE=legacy` 면 구버전(정지 카드+켄번스) 경로를 그대로 탄다.
+     워크플로 `workflow_dispatch` 에 `reel_style` 드롭다운(motion/legacy)을 추가해 GitHub 화면에서 즉시 되돌릴 수 있음.
+     **구버전 코드(`buildSingleReelCards`/`buildReel`/`reelTemplates.js`)는 지우지 말 것** — 롤백 경로다.
+   - **`deck.html` 은 임시폴더에만 쓴다**(기본). 상품 이미지를 data URI 로 품고 있어 3~6MB인데,
+     워크플로가 `published/` 를 통째로 커밋하므로 그대로 두면 public 저장소가 주당 30MB씩 불어난다.
+     브라우저로 애니메이션을 직접 볼 때만 `keepHtml: true` (POC 스크립트가 사용).
+   - **표지 첫 프레임 강화**: 첫 프레임이 곧 릴스 썸네일이자 스크롤 스토퍼라
+     `riseFast`/`imgFast` 시작 opacity 를 0.2/0.3 → 0.55/0.6 으로 올려 0프레임에도 훅·제품이 또렷이 읽히게 함.
+   - **미검증(다음 세션에서 반드시 확인)**: CI(ubuntu 러너, 4 vCPU)에서의 실제 렌더 시간·성공 여부.
+     로컬 48코어 기준 릴스 1개 52초이나 러너는 병렬도가 낮아 3~6분 예상. 한 실행 최대 2슬롯.
+     **오늘(금) 08시 실행이 모션덱 첫 클라우드 렌더** — 실패하면 `reel_style=legacy` 로 수동 재실행.
+     컬러 이모지 폰트(`fonts-noto-color-emoji`)도 이번에 처음 적용되므로 이모지 스티커가 컬러로 나오는지 같이 확인.
 7. **레거시 정리 여지** — `postedLog.js`의 `postedTodayKST` 등 구버전 가드가 새 슬롯 기반 가드로 대체된 후에도 코드에 남아있을 수 있음(사용 여부 미확인). `selectProducts.js`의 구버전 `pickCategory`/`selectProducts`도 `selectWeeklyPool` 도입 후 미사용 상태로 추정 — 필요시 정리.
 8. **연장 아이디어(합의만 됨, 미착수)**: DM 자동화(댓글→DM), IG 토큰 60일 자동 갱신, 유튜브 쇼츠 크로스포스트.
 
