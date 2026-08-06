@@ -82,6 +82,7 @@ export async function createWeekPool(now = Date.now()) {
   products.forEach((p, i) => {
     p.hook = content[i].hook;
     p.copy = content[i].copy;
+    p.buyHook = content[i].buyHook;
     p.narration = content[i].narration;
     p.tags = content[i].tags;
   });
@@ -98,6 +99,7 @@ export async function createWeekPool(now = Date.now()) {
       deeplink: p.deeplink,
       hook: p.hook,
       copy: p.copy,
+      buyHook: p.buyHook,
       narration: p.narration,
       tags: p.tags,
       category: p.category,
@@ -160,14 +162,15 @@ export async function generateDue(now = Date.now()) {
     const reelDir = `${PUB_DIR}/reels/${runId}/cards`;
     const reelCardPaths = await buildSingleReelCards(reelDir, {
       product: p, hook: p.hook, category: p.category?.name || '', benefits, others,
+      buyHook: p.buyHook,
     });
     const reelPath = `${PUB_DIR}/reels/${runId}/reel.mp4`;
     const bgmPath = 'assets/reel-bgm.mp3';
-    // 내레이션: 표지=훅 → 장점 슬라이드마다 1문장 → 마지막=다른템 유도 (카드 수와 일치)
+    // 내레이션: 표지=훅 → 장점 슬라이드마다 1문장 → 마지막=구매 유도 (카드 수와 일치)
     const narration = [
       p.hook.replace(/\s*\n\s*/g, ' '),
       ...benefits,
-      '이번 주 다른 추천템도 프로필 링크에 있어요',
+      '마음에 들면 프로필 링크에서 바로 구매하세요',
     ];
     await buildReel(reelCardPaths, {
       outPath: reelPath,

@@ -13,12 +13,17 @@ import { optionalEnv } from './config.js';
 const execFileP = promisify(execFile);
 const BG = '0xF5EDE1'; // 카드 여백 크림색
 const FPS = 30;
-const PAD_AFTER = 0.18; // 대사 뒤 여유(초) — 짧게(텀↓, 템포↑)
-const MIN_CARD = 1.2; // 카드 최소 노출(초)
-const LEAD = 0.06; // 카드 뜨고 대사 시작까지(초) — 텀↓
-const MIN_TOTAL = 20; // 릴스 총 길이 하한(초) — 단품이라도 20초 이상
+// 문장 사이 텀 최소화(2026-08-07). Edge TTS 는 음성 앞뒤에 무음을 0.2~0.4초씩 붙여 내보내는데,
+// 그게 "문장이 끝나고 다음 문장까지 비는" 체감의 주원인이었다(사용자 피드백).
+// → narrate() 에서 앞뒤 무음을 잘라낸 뒤 PAD/LEAD 를 거의 0으로 둔다.
+const PAD_AFTER = 0.06; // 대사 뒤 여유(초)
+const MIN_CARD = 1.0; // 카드 최소 노출(초)
+const LEAD = 0; // 카드 뜨고 대사 시작까지(초)
+const COVER_MIN = 1.6; // 표지 최소 노출(초) — 훅을 읽을 시간(발화가 짧아도 확보)
+const CTA_MAX = 4.2; // 마지막 CTA 카드 상한(초) — 길어지면 그대로 이탈 구간이 된다
+const MIN_TOTAL = 20; // 릴스 총 길이 하한(초)
 const MAX_TOTAL = 26; // 릴스 총 길이 상한(초)
-// 부족분은 마지막 카드(다른템 CTA)에 몰아 넣어 본문 대사 텀은 짧게 유지
+// 부족분은 마지막 카드(CTA)에 몰아 넣되 CTA_MAX 까지만 — 못 채우면 영상이 짧아지는 쪽을 택한다.
 const KEN_ZOOM = 0.06; // 카드별 미세 줌(움직임) 최대치
 
 async function ff(args) {
@@ -36,6 +41,20 @@ async function mediaDuration(file) {
     if (m) return +m[1] * 3600 + +m[2] * 60 + parseFloat(m[3]);
   }
   return 0;
+}
+
+/** 음성 앞뒤의 무음 제거 (뒤쪽은 뒤집어서 같은 필터를 한 번 더 태우는 정석 레시피) */
+async function trimSilence(file) {
+  const trimmed = file.replace(/\.mp3$/, '-trim.mp3');
+  const f = 'silenceremove=start_periods=1:start_duration=0:start_threshold=-45dB:detection=peak';
+  try {
+    await ff(['-i', resolve(file), '-af', `${f},areverse,${f},areverse`, '-c:a', 'libmp3lame', '-q:a', '3', trimmed]);
+    const d = await mediaDuration(trimmed);
+    if (d > 0.2) return { file: trimmed, duration: d };
+  } catch {
+    /* 실패하면 원본 사용 */
+  }
+  return { file, duration: await mediaDuration(file) };
 }
 
 /** 대사들을 TTS 합성 → [{file, duration}] (빈 대사는 file=null) */
@@ -57,7 +76,7 @@ async function narrate(lines, outDir) {
     const { audioFilePath } = await tts.toFile(outDir, text, { rate });
     const target = join(outDir, `narr-${String(i).padStart(2, '0')}.mp3`);
     renameSync(audioFilePath, target);
-    out.push({ file: target, duration: await mediaDuration(target) });
+    out.push(await trimSilence(target));
   }
   return out;
 }
@@ -87,18 +106,21 @@ export async function buildReel(cardPaths, opts = {}) {
     const d = narr[i]?.duration || 0;
     return d > 0 ? Math.max(d + PAD_AFTER, MIN_CARD) : 1.8;
   });
+  // 표지는 훅을 읽을 시간을 따로 확보
+  if (durations.length) durations[0] = Math.max(durations[0], COVER_MIN);
   // 총 길이 상한: 넘으면 여유분만 비례 축소(대사 길이 아래로는 안 줄임)
   const sum0 = durations.reduce((a, b) => a + b, 0);
+  const lastIdx = durations.length - 1;
   if (sum0 > MAX_TOTAL) {
     const scale = MAX_TOTAL / sum0;
     for (let i = 0; i < durations.length; i++) {
       const floor = (narr[i]?.duration || 0) + 0.1;
       durations[i] = Math.max(durations[i] * scale, floor);
     }
-  } else if (sum0 < MIN_TOTAL && durations.length) {
-    // 하한 부족분은 '마지막 카드'(다른템 CTA)에만 몰아 넣음
-    // → 본문 대사 사이 텀은 짧게 유지, 늘어난 시간은 클릭 유도 화면에서 소진
-    durations[durations.length - 1] += MIN_TOTAL - sum0;
+  } else if (sum0 < MIN_TOTAL && lastIdx >= 0) {
+    // 하한 부족분은 '마지막 카드'(CTA)에만 몰아 넣되 CTA_MAX 까지
+    // → 본문 대사 사이 텀은 그대로 짧게, CTA 화면도 늘어지지 않게
+    durations[lastIdx] = Math.min(durations[lastIdx] + (MIN_TOTAL - sum0), CTA_MAX);
   }
 
   // 2) 카드별 세로 클립 (페이드 없음 → 검정화면 X)

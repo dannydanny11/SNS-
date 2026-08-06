@@ -102,7 +102,7 @@ export async function buildReelCards(post, outDir, opts = {}) {
  */
 export async function buildSingleReelCards(outDir, opts) {
   const theme = THEMES[CONFIRMED_THEME];
-  const { product, hook, category = '', benefits = [], others = [] } = opts;
+  const { product, hook, category = '', benefits = [], others = [], buyHook } = opts;
   mkdirSync(outDir, { recursive: true });
   const files = [];
   let n = 1;
@@ -120,7 +120,7 @@ export async function buildSingleReelCards(outDir, opts) {
       product, benefit: benefits[i], step: i, steps, showPrice: i === steps - 1,
     }));
   }
-  await push(buildReelTeaserCta(theme, { others }));
+  await push(buildReelTeaserCta(theme, { others, buyHook: buyHook || undefined }));
   return files;
 }
 

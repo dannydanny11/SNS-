@@ -74,12 +74,15 @@ const POOL_SYSTEM = `너는 한국 인스타그램 릴스 대본가다. 계정 '
   · 1번 문장 = 이 제품의 **가장 강한 셀링포인트를 결론부터**, 인트로 없이 즉시. (첫 자막이 곧 훅)
   · 이후 문장은 서로 다른 각도(성능·편의·사용상황·누구에게). 제품명에 드러난 실제 특징(용량·소재·기능·크기)을 근거로 구체적으로.
   · 모든 문장은 '알맹이'(정보·가치)여야 한다. 마무리 인사·CTA 문구는 넣지 마라(행동 유도는 영상 마지막 화면에서 따로 처리).
+- buyHook: **영상 마지막 화면에 크게 박는 구매 유도 한마디(6~12자).** "사도 좋다 / 지금 사라"는 뉘앙스가 분명해야 한다.
+  · 예: "이 가격이면 사야죠", "지금 사두면 이득", "장바구니 직행각", "살까 말까면 사기", "고민할 가격 아님"
+  · 허위 긴급성("품절 임박","오늘만 이 가격") 금지 — 재고·기간을 우리가 확인할 수 없다. 의견 표현만.
 - tags: 해시태그 6~9개(한글 위주, # 포함).
 
 절대 금지: "직접 써봤다","사용해보니","내돈내산","후기" 등 허위 사용경험, 효능·건강 단정, 가격 단정 낭독, 인사말("안녕하세요"). 상황·특징·니즈 설명은 OK.
 
 출력은 반드시 아래 JSON 배열만(상품 순서대로):
-[{"hook":"...","copy":"...","narration":["문장1","문장2","문장3"],"tags":["#..",".."]}, ...]`;
+[{"hook":"...","copy":"...","buyHook":"...","narration":["문장1","문장2","문장3"],"tags":["#..",".."]}, ...]`;
 
 /**
  * 주간 풀 상품 각각의 릴스 카피(hook/copy/tags) 일괄 생성.
@@ -120,10 +123,12 @@ export async function generatePoolContent(products) {
     const it = arr[i] || {};
     const hook = String(it.hook || '오늘의 발견').trim();
     const copy = String(it.copy || '').trim();
+    // 구매 유도 훅 — 모션덱 릴스 마지막 화면용. 누락돼도 렌더러가 기본값으로 대체한다.
+    const buyHook = String(it.buyHook || '').trim();
     let narration = Array.isArray(it.narration) ? it.narration.map((s) => String(s).trim()).filter(Boolean) : [];
     if (narration.length === 0 && copy) narration = [copy];
     let tags = Array.isArray(it.tags) ? it.tags : [];
-    const check = [hook, copy, ...narration].join(' ');
+    const check = [hook, copy, buyHook, ...narration].join(' ');
     for (const bad of FORBIDDEN) {
       if (check.includes(bad)) throw new Error(`금지 표현 감지("${bad}") — 재생성 필요`);
     }
@@ -134,7 +139,7 @@ export async function generatePoolContent(products) {
       if (tags.length >= 8) break;
       if (!tags.includes(b)) tags.push(b);
     }
-    return { hook, copy, narration, tags: tags.slice(0, 9) };
+    return { hook, copy, buyHook, narration, tags: tags.slice(0, 9) };
   });
 }
 
